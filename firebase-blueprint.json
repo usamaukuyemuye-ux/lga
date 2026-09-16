@@ -1,0 +1,449 @@
+{
+  "entities": {
+    "Profile": {
+      "title": "Profile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "full_name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "active": { "type": "boolean" },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["id", "full_name", "email", "active"]
+    },
+    "UserRole": {
+      "title": "UserRole",
+      "description": "Role assigned to a user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "user_id": { "type": "string", "maxLength": 128 },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "secretary", "teacher", "parent", "finance", "owner"]
+        }
+      },
+      "required": ["user_id", "role"]
+    },
+    "SchoolClass": {
+      "title": "SchoolClass",
+      "description": "Class grade or section",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 80 },
+        "teacher_id": { "type": "string", "maxLength": 128 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["name"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Enrolled student record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "student_code": { "type": "string", "maxLength": 40 },
+        "full_name": { "type": "string", "maxLength": 100 },
+        "gender": { "type": "string", "maxLength": 20 },
+        "date_of_birth": { "type": "string", "maxLength": 40 },
+        "class_id": { "type": "string", "maxLength": 128 },
+        "parent_id": { "type": "string", "maxLength": 128 },
+        "parent_name": { "type": "string", "maxLength": 100 },
+        "parent_email": { "type": "string", "maxLength": 120 },
+        "parent_phone": { "type": "string", "maxLength": 40 },
+        "address": { "type": "string", "maxLength": 200 },
+        "photo_url": { "type": "string", "maxLength": 500 },
+        "qr_token": { "type": "string", "maxLength": 128 },
+        "religion": { "type": "string", "maxLength": 50 },
+        "academic_year": { "type": "string", "maxLength": 40 },
+        "active": { "type": "boolean" },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["student_code", "full_name", "active"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Student attendance entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "student_id": { "type": "string", "maxLength": 128 },
+        "class_id": { "type": "string", "maxLength": 128 },
+        "attendance_date": { "type": "string", "maxLength": 40 },
+        "status": {
+          "type": "string",
+          "enum": ["present", "absent", "sick", "late"]
+        },
+        "arrival_time": { "type": "string", "maxLength": 40 },
+        "departure_time": { "type": "string", "maxLength": 40 },
+        "recorded_by": { "type": "string", "maxLength": 128 },
+        "recorded_by_name": { "type": "string", "maxLength": 100 },
+        "note": { "type": "string", "maxLength": 500 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["student_id", "attendance_date", "status"]
+    },
+    "StaffAttendance": {
+      "title": "StaffAttendance",
+      "description": "Staff attendance entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "staff_id": { "type": "string", "maxLength": 128 },
+        "staff_name": { "type": "string", "maxLength": 100 },
+        "attendance_date": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "maxLength": 40 },
+        "arrival_time": { "type": "string", "maxLength": 40 },
+        "departure_time": { "type": "string", "maxLength": 40 },
+        "recorded_by": { "type": "string", "maxLength": 128 },
+        "recorded_by_name": { "type": "string", "maxLength": 100 },
+        "note": { "type": "string", "maxLength": 500 },
+        "created_at": { "type": "string", "maxLength": 40 },
+        "updated_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["staff_id", "attendance_date", "status"]
+    },
+    "PermissionRequest": {
+      "title": "PermissionRequest",
+      "description": "Teacher request for class permission or absence",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "teacher_id": { "type": "string", "maxLength": 128 },
+        "teacher_name": { "type": "string", "maxLength": 100 },
+        "class_id": { "type": "string", "maxLength": 128 },
+        "reason": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "maxLength": 30 },
+        "decision_note": { "type": "string", "maxLength": 500 },
+        "reviewed_by": { "type": "string", "maxLength": 128 },
+        "reviewed_by_name": { "type": "string", "maxLength": 100 },
+        "reviewed_at": { "type": "string", "maxLength": 40 },
+        "created_at": { "type": "string", "maxLength": 40 },
+        "updated_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["teacher_id", "reason", "status"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "School wide or role broadcast",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 150 },
+        "body": { "type": "string", "maxLength": 2000 },
+        "action_label": { "type": "string", "maxLength": 80 },
+        "action_url": { "type": "string", "maxLength": 300 },
+        "image_url": { "type": "string", "maxLength": 500 },
+        "created_by": { "type": "string", "maxLength": 128 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["title", "body"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Parent and system alert log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "recipient_email": { "type": "string", "maxLength": 120 },
+        "subject": { "type": "string", "maxLength": 200 },
+        "body": { "type": "string", "maxLength": 2000 },
+        "parent_id": { "type": "string", "maxLength": 128 },
+        "student_id": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "maxLength": 40 },
+        "error": { "type": "string", "maxLength": 500 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["recipient_email", "subject", "body", "status"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Fee payment record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "student_id": { "type": "string", "maxLength": 128 },
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "category": { "type": "string", "maxLength": 50 },
+        "method": { "type": "string", "maxLength": 50 },
+        "paid_on": { "type": "string", "maxLength": 40 },
+        "term": { "type": "string", "maxLength": 50 },
+        "reference": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "maxLength": 40 },
+        "description": { "type": "string", "maxLength": 500 },
+        "recorded_by": { "type": "string", "maxLength": 128 },
+        "recorded_by_name": { "type": "string", "maxLength": 100 },
+        "created_at": { "type": "string", "maxLength": 40 },
+        "updated_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["student_id", "amount", "category", "method", "status"]
+    },
+    "Timetable": {
+      "title": "Timetable",
+      "description": "Class schedule slot",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "class_id": { "type": "string", "maxLength": 128 },
+        "teacher_id": { "type": "string", "maxLength": 128 },
+        "subject": { "type": "string", "maxLength": 80 },
+        "day_of_week": { "type": "number" },
+        "start_time": { "type": "string", "maxLength": 20 },
+        "end_time": { "type": "string", "maxLength": 20 },
+        "room": { "type": "string", "maxLength": 50 },
+        "created_at": { "type": "string", "maxLength": 40 },
+        "updated_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["subject", "day_of_week", "start_time", "end_time"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "System event audit trail",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "user_id": { "type": "string", "maxLength": 128 },
+        "user_name": { "type": "string", "maxLength": 100 },
+        "action": { "type": "string", "maxLength": 100 },
+        "entity": { "type": "string", "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 4000 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["action"]
+    },
+    "SchoolSetting": {
+      "title": "SchoolSetting",
+      "description": "Global school identity & configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "school_name": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "address": { "type": "string", "maxLength": 300 },
+        "notify_email": { "type": "string", "maxLength": 120 },
+        "logo_url": { "type": "string", "maxLength": 500 },
+        "sms_enabled": { "type": "boolean" },
+        "sms_provider": { "type": "string", "maxLength": 50 },
+        "sms_username": { "type": "string", "maxLength": 100 },
+        "sms_api_key": { "type": "string", "maxLength": 200 },
+        "sms_sender_id": { "type": "string", "maxLength": 20 },
+        "sms_mode": { "type": "string", "enum": ["sandbox", "production"] },
+        "sms_send_on_scan": { "type": "boolean" },
+        "sms_send_on_register": { "type": "boolean" },
+        "sms_notify_staff": { "type": "boolean" },
+        "sms_trigger_target": { "type": "string", "enum": ["all", "exceptions"] }
+      },
+      "required": ["school_name", "email"]
+    },
+    "SmsLog": {
+      "title": "SmsLog",
+      "description": "Log of SMS attendance and check-in alerts dispatched to parents and staff",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "recipient_phone": { "type": "string", "maxLength": 50 },
+        "recipient_name": { "type": "string", "maxLength": 120 },
+        "recipient_type": { "type": "string", "enum": ["parent", "staff"] },
+        "student_id": { "type": "string", "maxLength": 128 },
+        "student_name": { "type": "string", "maxLength": 120 },
+        "message": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["delivered", "sent", "simulated", "failed"] },
+        "cost": { "type": "string", "maxLength": 50 },
+        "provider": { "type": "string", "maxLength": 50 },
+        "sent_at": { "type": "string", "maxLength": 40 },
+        "error_message": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["recipient_phone", "message", "status"]
+    },
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Homework and class assignments created by teachers with admin approval",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "teacher_id": { "type": "string", "maxLength": 128 },
+        "teacher_name": { "type": "string", "maxLength": 100 },
+        "class_id": { "type": "string", "maxLength": 128 },
+        "class_name": { "type": "string", "maxLength": 80 },
+        "title": { "type": "string", "maxLength": 150 },
+        "subject": { "type": "string", "maxLength": 80 },
+        "type": {
+          "type": "string",
+          "enum": ["homework", "assignment", "project"]
+        },
+        "description": { "type": "string", "maxLength": 2000 },
+        "questions": { "type": "string", "maxLength": 5000 },
+        "target_student_ids": { "type": "string", "maxLength": 1000 },
+        "due_date": { "type": "string", "maxLength": 40 },
+        "total_points": { "type": "number" },
+        "status": {
+          "type": "string",
+          "enum": ["pending_approval", "approved", "rejected"]
+        },
+        "reviewed_by": { "type": "string", "maxLength": 128 },
+        "reviewed_at": { "type": "string", "maxLength": 40 },
+        "created_at": { "type": "string", "maxLength": 40 },
+        "updated_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["teacher_id", "class_id", "title", "subject", "status"]
+    },
+    "AssignmentSubmission": {
+      "title": "AssignmentSubmission",
+      "description": "Student homework submissions with automated marking",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "assignment_id": { "type": "string", "maxLength": 128 },
+        "student_id": { "type": "string", "maxLength": 128 },
+        "student_name": { "type": "string", "maxLength": 100 },
+        "parent_id": { "type": "string", "maxLength": 128 },
+        "class_id": { "type": "string", "maxLength": 128 },
+        "answers": { "type": "string", "maxLength": 2000 },
+        "score": { "type": "number" },
+        "max_score": { "type": "number" },
+        "status": { "type": "string", "maxLength": 40 },
+        "teacher_feedback": { "type": "string", "maxLength": 1000 },
+        "auto_feedback": { "type": "string", "maxLength": 500 },
+        "submitted_at": { "type": "string", "maxLength": 40 },
+        "marked_at": { "type": "string", "maxLength": 40 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["assignment_id", "student_id", "status"]
+    },
+    "Club": {
+      "title": "Club",
+      "description": "School extracurricular activities and sports clubs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120 },
+        "category": {
+          "type": "string",
+          "enum": [
+            "Sports",
+            "Arts & Culture",
+            "Academic & STEM",
+            "Music & Performing",
+            "Leadership & Clubs"
+          ]
+        },
+        "description": { "type": "string", "maxLength": 2000 },
+        "schedule": { "type": "string", "maxLength": 150 },
+        "venue": { "type": "string", "maxLength": 120 },
+        "coach_id": { "type": "string", "maxLength": 128 },
+        "coach_email": { "type": "string", "maxLength": 120 },
+        "coach_name": { "type": "string", "maxLength": 100 },
+        "coach_phone": { "type": "string", "maxLength": 40 },
+        "capacity": { "type": "number" },
+        "fee": { "type": "string", "maxLength": 50 },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive"]
+        },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["name", "category", "schedule", "venue", "status"]
+    },
+    "ClubMembership": {
+      "title": "ClubMembership",
+      "description": "Student enrollment in extracurricular clubs and teams",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "club_id": { "type": "string", "maxLength": 128 },
+        "student_id": { "type": "string", "maxLength": 128 },
+        "student_name": { "type": "string", "maxLength": 100 },
+        "student_code": { "type": "string", "maxLength": 40 },
+        "class_name": { "type": "string", "maxLength": 80 },
+        "parent_id": { "type": "string", "maxLength": 128 },
+        "parent_name": { "type": "string", "maxLength": 100 },
+        "role_in_club": { "type": "string", "maxLength": 50 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "enrolled_at": { "type": "string", "maxLength": 40 },
+        "enrolled_by_name": { "type": "string", "maxLength": 100 },
+        "enrolled_by_role": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["club_id", "student_id", "student_name"]
+    }
+  },
+  "firestore": {
+    "/profiles/{userId}": {
+      "schema": "Profile",
+      "description": "User profiles indexed by auth UID"
+    },
+    "/user_roles/{roleId}": {
+      "schema": "UserRole",
+      "description": "App role assignments"
+    },
+    "/classes/{classId}": {
+      "schema": "SchoolClass",
+      "description": "School classes and grades"
+    },
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Students database"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Daily student attendance entries"
+    },
+    "/staff_attendance/{staffAttendanceId}": {
+      "schema": "StaffAttendance",
+      "description": "Daily staff attendance entries"
+    },
+    "/permission_requests/{requestId}": {
+      "schema": "PermissionRequest",
+      "description": "Staff leave/permission requests"
+    },
+    "/announcements/{announcementId}": {
+      "schema": "Announcement",
+      "description": "School bulletins"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Outgoing message log"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Tuition and fee payments"
+    },
+    "/timetable/{timetableId}": {
+      "schema": "Timetable",
+      "description": "Weekly class schedules"
+    },
+    "/audit_logs/{auditId}": {
+      "schema": "AuditLog",
+      "description": "Security audit records"
+    },
+    "/school_settings/{settingId}": {
+      "schema": "SchoolSetting",
+      "description": "School metadata and preferences"
+    },
+    "/sms_logs/{smsId}": {
+      "schema": "SmsLog",
+      "description": "Log of SMS attendance notifications dispatched to parents and staff"
+    },
+    "/assignments/{assignmentId}": {
+      "schema": "Assignment",
+      "description": "Homework and class assignments created by teachers"
+    },
+    "/assignment_submissions/{submissionId}": {
+      "schema": "AssignmentSubmission",
+      "description": "Student homework submissions with automated marking"
+    },
+    "/clubs/{clubId}": {
+      "schema": "Club",
+      "description": "Extracurricular clubs and athletic activities"
+    },
+    "/club_memberships/{membershipId}": {
+      "schema": "ClubMembership",
+      "description": "Student memberships in clubs and teams"
+    }
+  }
+}

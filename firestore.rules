@@ -1,0 +1,170 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function isPermitted() {
+      return request.time != null;
+    }
+
+    // Test connection doc
+    match /test/{docId} {
+      allow read, write: if isPermitted();
+    }
+
+    // Profiles collection
+    match /profiles/{userId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(userId);
+    }
+
+    // User Roles collection
+    match /user_roles/{roleId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(roleId);
+    }
+
+    // Classes collection
+    match /classes/{classId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(classId);
+    }
+
+    // Students collection
+    match /students/{studentId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(studentId);
+    }
+
+    // Attendance collection
+    match /attendance/{attendanceId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(attendanceId);
+    }
+
+    // Staff Attendance collection
+    match /staff_attendance/{staffAttendanceId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(staffAttendanceId);
+    }
+
+    // Permission requests collection
+    match /permission_requests/{requestId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(requestId);
+    }
+
+    // Announcements collection
+    match /announcements/{announcementId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(announcementId);
+    }
+
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(notificationId);
+    }
+
+    // Payments collection
+    match /payments/{paymentId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(paymentId);
+    }
+
+    // Timetable collection
+    match /timetable/{timetableId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(timetableId);
+    }
+
+    // Audit logs (Append only)
+    match /audit_logs/{auditId} {
+      allow read, create: if isPermitted() && isValidId(auditId);
+      allow update, delete: if false;
+    }
+
+    // School settings
+    match /school_settings/{settingId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(settingId);
+    }
+
+    // SMS logs collection
+    match /sms_logs/{smsId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(smsId);
+    }
+
+    // Assignments & Homework collection
+    match /assignments/{assignmentId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(assignmentId);
+    }
+
+    // Assignment Submissions
+    match /assignment_submissions/{submissionId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(submissionId);
+    }
+
+    // Quizzes collection
+    match /quizzes/{quizId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(quizId);
+    }
+
+    // Quiz Questions collection
+    match /quiz_questions/{questionId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(questionId);
+    }
+
+    // Question Bank collection
+    match /question_bank/{questionId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(questionId);
+    }
+
+    // Quiz Attempts & Auto-marking results
+    match /quiz_attempts/{attemptId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(attemptId);
+    }
+
+    // Teacher & Staff Attendance logs
+    match /teacher_attendance/{attId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(attId);
+    }
+
+    // Student Discipline Incidents
+    match /discipline_incidents/{incidentId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(incidentId);
+    }
+
+    // Activities and Clubs collection
+    match /clubs/{clubId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(clubId);
+    }
+
+    // Club Memberships collection
+    match /club_memberships/{membershipId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(membershipId);
+    }
+
+    // Fallback for any other collection
+    match /{document=**} {
+      allow read, write: if isPermitted();
+    }
+  }
+}
+
+

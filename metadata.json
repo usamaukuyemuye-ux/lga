@@ -1,0 +1,6 @@
+{
+  "name": "Little Gems Academy",
+  "description": "Little Gems Academy school management system with QR ID cards, multi-role dashboards, announcements, extracurricular activities and clubs, student discipline tracking, timetable lesson allocations, teacher attendance, and Head of Studies academic oversight.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

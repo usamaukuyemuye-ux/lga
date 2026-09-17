@@ -5,6 +5,11 @@ if (!process.env.NODE_ENV) {
 }
 
 export default defineConfig({
+  vite: {
+    esbuild: {
+      jsxDev: false,
+    },
+  },
   nitro: {
     preset: process.env.NITRO_PRESET || (process.env.VERCEL ? "vercel" : "node-server"),
     vercel: {

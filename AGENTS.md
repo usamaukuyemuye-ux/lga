@@ -1,12 +1,9 @@
-<!-- LOVABLE:BEGIN -->
+# SchoolTrack Project Guidelines
 
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
+This application is built with React 18, TypeScript, TanStack Start, Tailwind CSS, and Firebase Firestore.
 
-<!-- LOVABLE:END -->
+## Architecture Guidelines
+- Keep serverless entries and Nitro presets compatible with Vercel and production deployments.
+- Ensure Firestore database operations and security rules are maintained.
+- Maintain responsive, accessible design across desktop and mobile layouts.
+

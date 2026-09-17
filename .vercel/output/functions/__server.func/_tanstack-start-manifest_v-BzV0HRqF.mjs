@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BlGO7MV9.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BzV0HRqF.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/app/applet/src/routes/__root.tsx",
@@ -8,7 +8,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/auth"
 		],
 		preloads: [
-			"/assets/index-eM6JsxpX.js",
+			"/assets/index-DzV-mKwZ.js",
 			"/assets/rolldown-runtime-Bh1tDfsg.js",
 			"/assets/jsx-dev-runtime-cnqHEIQe.js",
 			"/assets/react-dom-Tz3Z36GI.js",
@@ -22,13 +22,13 @@ var tsrStartManifest = () => ({ routes: {
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-eM6JsxpX.js"
+			src: "/assets/index-DzV-mKwZ.js"
 		} }]
 	},
 	"/": {
 		filePath: "/app/applet/src/routes/index.tsx",
 		children: void 0,
-		preloads: ["/assets/routes-DI5b4fUH.js", "/assets/login-view-CJFGgQE8.js"]
+		preloads: ["/assets/routes-C90j5Fp1.js", "/assets/login-view-BOZZFaiV.js"]
 	},
 	"/_authenticated": {
 		filePath: "/app/applet/src/routes/_authenticated/route.tsx",
@@ -55,8 +55,8 @@ var tsrStartManifest = () => ({ routes: {
 			"/_authenticated/users"
 		],
 		preloads: [
-			"/assets/route-COGGEpVR.js",
-			"/assets/useQuery-B4gwuyo8.js",
+			"/assets/route-DwIOKP5N.js",
+			"/assets/useQuery-C7pci6Po.js",
 			"/assets/dist-pw6KrP9u.js",
 			"/assets/baby-CUrPXUqF.js",
 			"/assets/book-open-check-DyonIiyQ.js",
@@ -82,14 +82,14 @@ var tsrStartManifest = () => ({ routes: {
 	"/auth": {
 		filePath: "/app/applet/src/routes/auth.tsx",
 		children: void 0,
-		preloads: ["/assets/auth-DI5b4fUH.js", "/assets/login-view-CJFGgQE8.js"]
+		preloads: ["/assets/auth-C90j5Fp1.js", "/assets/login-view-BOZZFaiV.js"]
 	},
 	"/_authenticated/activities": {
 		filePath: "/app/applet/src/routes/_authenticated/activities.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/activities-REbXm3Vc.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/activities-Cxlckavq.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/check-DDoUvXOu.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/circle-alert-bwiYx5mw.js",
@@ -111,7 +111,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/table-BsOojdpq.js",
 			"/assets/badge-DqNjr8Rj.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/export-CGg7bwXH.js",
+			"/assets/export-DgrIaMnO.js",
 			"/assets/textarea-DTOBYZSK.js"
 		]
 	},
@@ -119,8 +119,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/announcements.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/announcements-C03sKNLp.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/announcements-DFM44lOU.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/calendar-CGmnSXVo.js",
 			"/assets/loader-circle-Dpc1nClw.js",
 			"/assets/plus-2edAPxdY.js",
@@ -136,8 +136,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/assignments.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/assignments-Kw4CX2ed.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/assignments-D8HptwGe.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/circle-check-EfpRxnkm.js",
 			"/assets/file-spreadsheet-kQLM7NSr.js",
@@ -153,7 +153,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/table-BsOojdpq.js",
 			"/assets/badge-DqNjr8Rj.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/export-CGg7bwXH.js",
+			"/assets/export-DgrIaMnO.js",
 			"/assets/textarea-DTOBYZSK.js"
 		]
 	},
@@ -161,8 +161,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/attendance.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/attendance-BYzQ-KUE.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/attendance-Cde7US3f.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/calendar-CGmnSXVo.js",
 			"/assets/check-DDoUvXOu.js",
 			"/assets/select-DBs9M1VV.js",
@@ -182,7 +182,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/table-BsOojdpq.js",
 			"/assets/badge-DqNjr8Rj.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/export-CGg7bwXH.js",
+			"/assets/export-DgrIaMnO.js",
 			"/assets/textarea-DTOBYZSK.js"
 		]
 	},
@@ -190,7 +190,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/audit.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/audit-heeELgye.js",
+			"/assets/audit-CpcSCCup.js",
 			"/assets/card-C0FzSzYW.js",
 			"/assets/school-B3wMdM0U.js",
 			"/assets/table-BsOojdpq.js"
@@ -200,7 +200,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/cards.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/cards-lvA32qJS.js",
+			"/assets/cards-Dw6gPRSi.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/printer-CL8xd8GR.js",
 			"/assets/card-C0FzSzYW.js",
@@ -212,8 +212,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/children.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/children-s_PLDtu-.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/children-COhP1tBi.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/calendar-CGmnSXVo.js",
 			"/assets/check-DDoUvXOu.js",
 			"/assets/select-DBs9M1VV.js",
@@ -234,7 +234,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/table-BsOojdpq.js",
 			"/assets/badge-DqNjr8Rj.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/export-CGg7bwXH.js",
+			"/assets/export-DgrIaMnO.js",
 			"/assets/textarea-DTOBYZSK.js"
 		]
 	},
@@ -242,8 +242,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/classes.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/classes-CaJM3JZ6.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/classes-DAZBxIu8.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/plus-2edAPxdY.js",
 			"/assets/search-Dfhf8tMv.js",
 			"/assets/trash-2--YxwQdh_.js",
@@ -260,7 +260,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/dashboard.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/dashboard-oVvGsgEq.js",
+			"/assets/dashboard-BTZEWd5Q.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/circle-check-EfpRxnkm.js",
 			"/assets/clock-BMQOfL7K.js",
@@ -286,8 +286,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/discipline.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/discipline-BNo95SAz.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/discipline-DmefZWMH.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/calendar-CGmnSXVo.js",
 			"/assets/check-DDoUvXOu.js",
 			"/assets/select-DBs9M1VV.js",
@@ -309,7 +309,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/table-BsOojdpq.js",
 			"/assets/badge-DqNjr8Rj.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/export-CGg7bwXH.js",
+			"/assets/export-DgrIaMnO.js",
 			"/assets/textarea-DTOBYZSK.js"
 		]
 	},
@@ -317,8 +317,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/finance.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/finance-BMhG0Uox.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/finance-DozZd-Sc.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/file-down-Br66UdA8.js",
 			"/assets/plus-2edAPxdY.js",
@@ -329,7 +329,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/label-7dEoX6tX.js",
 			"/assets/table-BsOojdpq.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/export-CGg7bwXH.js",
+			"/assets/export-DgrIaMnO.js",
 			"/assets/textarea-DTOBYZSK.js"
 		]
 	},
@@ -337,7 +337,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/notifications.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/notifications-DhjGxhUo.js",
+			"/assets/notifications-vxBKoW4N.js",
 			"/assets/mail-DQfAlFbA.js",
 			"/assets/card-C0FzSzYW.js",
 			"/assets/school-B3wMdM0U.js",
@@ -348,20 +348,20 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/payments.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/payments-BUT1c7O_.js",
+			"/assets/payments-DpZJFSio.js",
 			"/assets/file-down-Br66UdA8.js",
 			"/assets/card-C0FzSzYW.js",
 			"/assets/school-B3wMdM0U.js",
 			"/assets/table-BsOojdpq.js",
-			"/assets/export-CGg7bwXH.js"
+			"/assets/export-DgrIaMnO.js"
 		]
 	},
 	"/_authenticated/permissions": {
 		filePath: "/app/applet/src/routes/_authenticated/permissions.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/permissions-WS4jU8gg.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/permissions-DFY3y_tY.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/calendar-CGmnSXVo.js",
 			"/assets/check-DDoUvXOu.js",
 			"/assets/select-DBs9M1VV.js",
@@ -382,7 +382,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/reports.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/reports-Clq6Ggmi.js",
+			"/assets/reports-DiVS8-HC.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/file-down-Br66UdA8.js",
 			"/assets/file-spreadsheet-kQLM7NSr.js",
@@ -392,15 +392,15 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/input-DgFUlPQa.js",
 			"/assets/label-7dEoX6tX.js",
 			"/assets/table-BsOojdpq.js",
-			"/assets/export-CGg7bwXH.js"
+			"/assets/export-DgrIaMnO.js"
 		]
 	},
 	"/_authenticated/scan": {
 		filePath: "/app/applet/src/routes/_authenticated/scan.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/scan-Beqw6rgR.js",
-			"/assets/auth-middleware-DLmwIYaK.js",
+			"/assets/scan-D_AQjFNq.js",
+			"/assets/auth-middleware-BNaPzf4w.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/circle-check-EfpRxnkm.js",
 			"/assets/clock-BMQOfL7K.js",
@@ -420,7 +420,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/settings.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/settings-Dh_TvuZ_.js",
+			"/assets/settings-DCLNEaqK.js",
 			"/assets/check-DDoUvXOu.js",
 			"/assets/sparkles-rcw4pWpJ.js",
 			"/assets/save-BLdbflvq.js",
@@ -435,8 +435,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/students.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/students-Beymigcz.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/students-CvoAmuPL.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/circle-check-EfpRxnkm.js",
 			"/assets/student-qr-modal-Bww-pbTO.js",
@@ -464,8 +464,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/timetable.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/timetable-Bzh7mtxL.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/timetable-T6PW5wba.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/plus-2edAPxdY.js",
 			"/assets/trash-2--YxwQdh_.js",
@@ -481,8 +481,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/app/applet/src/routes/_authenticated/users.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/users-DKm3Rxps.js",
-			"/assets/useMutation-DFPsB1N_.js",
+			"/assets/users-z8gPp7G3.js",
+			"/assets/useMutation-DbKxNdS6.js",
 			"/assets/select-DBs9M1VV.js",
 			"/assets/key-round-EWGpb5CW.js",
 			"/assets/search-Dfhf8tMv.js",
@@ -495,7 +495,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/table-BsOojdpq.js",
 			"/assets/badge-DqNjr8Rj.js",
 			"/assets/dialog-xIuUTRuv.js",
-			"/assets/admin.functions-DBoCVMwg.js"
+			"/assets/admin.functions-C5_pFDI2.js"
 		]
 	}
 } });

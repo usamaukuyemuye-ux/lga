@@ -15,28 +15,13 @@ import { t as Route$20 } from "./discipline-Di7qLwEn.mjs";
 import { t as Route$21 } from "./scan-CoObJ7-m.mjs";
 import { r as Route$22 } from "./students-BDsOcMHY.mjs";
 import { n as Route$23 } from "./timetable-D6aNC_Sb.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C8DpKB6G.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DcE5UmOL.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-DGXmATdC.css";
-function reportLovableError(error, context = {}) {
+function reportAppError(error, context = {}) {
 	if (typeof window === "undefined") return;
-	window.__lovableEvents?.captureException?.(error, {
-		source: "react_error_boundary",
-		route: window.location.pathname,
-		...context
-	}, {
-		mechanism: "react_error_boundary",
-		handled: false,
-		severity: "error"
-	});
-	const message = error instanceof Response ? `Response ${error.status}${error.url ? ` at ${error.url}` : ""}` : error instanceof Error ? error.message : String(error);
-	const stack = error instanceof Error ? error.stack : void 0;
-	window.__lovableReportRuntimeError?.({
-		message,
-		...stack !== void 0 && { stack },
-		filename: window.location.pathname
-	});
+	console.error("[SchoolTrack Error]", error, context);
 }
 var _jsxFileName$1 = "/app/applet/src/components/ui/sonner.tsx";
 var Toaster$1 = ({ ...props }) => {
@@ -153,7 +138,7 @@ function ErrorComponent({ error, reset }) {
 	console.error(error);
 	const router = useRouter();
 	(0, import_react.useEffect)(() => {
-		reportLovableError(error, { boundary: "tanstack_root_error_component" });
+		reportAppError(error, { boundary: "tanstack_root_error_component" });
 	}, [error]);
 	return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 		className: "flex min-h-screen items-center justify-center bg-background px-4",

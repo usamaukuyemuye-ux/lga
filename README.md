@@ -1,29 +1,35 @@
-# Welcome to your Lovable project
+# SchoolTrack - School Management System
 
-This project was built with [Lovable](https://lovable.dev).
+A comprehensive school management and student tracking web application built with React, TypeScript, TanStack Start, and Firebase Firestore.
 
-## Build with Lovable
+## Features
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+- **Student Information Management**: Complete student records, classes, guardians, and enrollments.
+- **Attendance Tracking**: Rapid QR code / barcode scanning for students and staff attendance with real-time logs.
+- **Academic Grading & Timetables**: Course management, assignment submissions, grading, and scheduled class periods.
+- **Finance & Tuition**: Fee tracking, receipts, payment status, and audit reports.
+- **Disciplinary Records & Health Logs**: Incident tracking, nurse visits, and parent notifications.
+- **Multi-Role Portal**: Secure role-based dashboards for Administrators, Teachers, Parents, and Students.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Tech Stack
 
-## Development
+- **Frontend**: React 18, TanStack Router, TanStack Query, Tailwind CSS, Lucide Icons, Radix UI
+- **Backend & Database**: Firebase Firestore & Firebase Authentication
+- **Full-Stack Runtime**: TanStack Start with Nitro SSR engine (Vercel and Node Server compatible)
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Local Development
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm install
 npm run dev
 ```
 
-## Built with
+The dev server will start at `http://localhost:3000`.
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+## Production Build & Deployment
+
+```sh
+npm run build
+npm run start
+```
+

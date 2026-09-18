@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export const DEFAULT_SCHOOL_LOGO = "/little-gems-logo.png";
+export const DEFAULT_SCHOOL_LOGO = "/logo.jpeg";
 const STORAGE_KEY = "school_custom_logo";
 const EVENT_NAME = "school_logo_updated";
 

@@ -87,8 +87,8 @@ export function dispatchLocalNotification(title: string, body: string, actionUrl
     try {
       const notif = new Notification(`💎 Little Gems Academy: ${title}`, {
         body: body.slice(0, 160),
-        icon: "/little-gems-logo.png",
-        badge: "/little-gems-logo.png",
+        icon: "/logo.jpeg",
+        badge: "/logo.jpeg",
       });
       if (actionUrl) {
         notif.onclick = () => {

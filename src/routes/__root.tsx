@@ -16,6 +16,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { testConnection } from "@/integrations/firebase/connection";
 import { ensureSeeded } from "@/integrations/firebase/firestore-client";
 import { GlobalNotificationWatcher } from "@/components/school/notification-watcher";
+import { CookieBanner } from "@/components/school/cookie-banner";
 
 function NotFoundComponent() {
   return (
@@ -138,6 +139,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <GlobalNotificationWatcher />
+        <CookieBanner />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <Toaster richColors position="top-right" />

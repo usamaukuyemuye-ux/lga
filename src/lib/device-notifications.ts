@@ -12,8 +12,10 @@ function getCookie(name: string): string | null {
 
 function setCookie(name: string, value: string, days = 365) {
   if (typeof document === "undefined") return;
+  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+  const secureFlag = isHttps ? "; Secure" : "";
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax${secureFlag}`;
 }
 
 // Generate or retrieve persistent device ID

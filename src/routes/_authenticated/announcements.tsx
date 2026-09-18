@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Megaphone, Pin, Plus, Trash2, ExternalLink, X, Loader2, Calendar } from "lucide-react";
+import { Megaphone, Pin, Plus, Trash2, ExternalLink, X, Loader2, Calendar, Volume2, VolumeX, BellRing } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { playChimeSound, isNotificationSoundEnabled, setNotificationSoundEnabled } from "@/lib/notification-sound";
 
 export const Route = createFileRoute("/_authenticated/announcements")({
   head: () => ({
@@ -56,6 +57,31 @@ function AnnouncementsPage() {
     },
   });
 
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  useEffect(() => {
+    setSoundEnabled(isNotificationSoundEnabled());
+    const handlePref = (e: any) => {
+      if (typeof e?.detail?.enabled === "boolean") {
+        setSoundEnabled(e.detail.enabled);
+      }
+    };
+    window.addEventListener("lga-sound-pref-changed", handlePref);
+    return () => window.removeEventListener("lga-sound-pref-changed", handlePref);
+  }, []);
+
+  const toggleSound = () => {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    setNotificationSoundEnabled(next);
+    if (next) {
+      playChimeSound("announcement");
+      toast.success("Announcement chime sound enabled");
+    } else {
+      toast.info("Announcement chime sound muted");
+    }
+  };
+
   const add = useMutation({
     mutationFn: async () => {
       const { error, data } = await supabase
@@ -76,13 +102,14 @@ function AnnouncementsPage() {
       return data;
     },
     onSuccess: () => {
+      playChimeSound("announcement");
       setTitle("");
       setBody("");
       setActionLabel("");
       setActionUrl("");
       setIsPinned(false);
       setShowCreateForm(false);
-      toast.success("Announcement posted successfully");
+      toast.success("Announcement posted with broadcast chime");
       void qc.invalidateQueries({ queryKey: ["announcements"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -116,24 +143,49 @@ function AnnouncementsPage() {
         title="School Announcements"
         description="Official school circulars, notices, and administrative updates."
         action={
-          canManage && (
+          <div className="flex items-center gap-2">
             <Button
-              onClick={() => setShowCreateForm((prev) => !prev)}
-              variant={showCreateForm ? "outline" : "default"}
+              variant="outline"
               size="sm"
-              className="gap-1.5"
+              onClick={toggleSound}
+              className={cn(
+                "h-8 text-xs gap-1.5",
+                soundEnabled ? "text-primary border-primary/30" : "text-muted-foreground",
+              )}
+              title={soundEnabled ? "Notification sound enabled" : "Notification sound muted"}
             >
-              {showCreateForm ? (
+              {soundEnabled ? (
                 <>
-                  <X className="size-4" /> Close
+                  <Volume2 className="size-3.5 text-primary" />
+                  <span>Chime On</span>
                 </>
               ) : (
                 <>
-                  <Plus className="size-4" /> Post Announcement
+                  <VolumeX className="size-3.5" />
+                  <span>Muted</span>
                 </>
               )}
             </Button>
-          )
+
+            {canManage && (
+              <Button
+                onClick={() => setShowCreateForm((prev) => !prev)}
+                variant={showCreateForm ? "outline" : "default"}
+                size="sm"
+                className="gap-1.5 h-8 text-xs"
+              >
+                {showCreateForm ? (
+                  <>
+                    <X className="size-3.5" /> Close
+                  </>
+                ) : (
+                  <>
+                    <Plus className="size-3.5" /> Post Announcement
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
         }
       />
 

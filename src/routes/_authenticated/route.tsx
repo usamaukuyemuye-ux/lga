@@ -82,7 +82,7 @@ const NAV: NavItem[] = [
     to: "/students",
     label: "Students",
     icon: GraduationCap,
-    roles: ["admin", "secretary", "teacher", "owner", "head_of_studies"],
+    roles: ["admin", "secretary", "teacher", "owner", "head_of_studies", "finance"],
   },
   {
     to: "/assignments",

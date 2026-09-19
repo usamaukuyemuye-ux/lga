@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { PageHeader, StatusBadge } from "@/components/school/ui";
+import { StudentProfileModal, type StudentProfileData } from "@/components/school/student-profile-modal";
 import { fetchAttendance, fetchClasses, fmtDate, fmtTime, logAudit, todayISO } from "@/lib/school";
 import { exportExcel, exportPdf } from "@/lib/export";
 import { Button } from "@/components/ui/button";
@@ -61,12 +62,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/attendance")({
   head: () => ({
     meta: [
-      { title: "Attendance & Register — SchoolTrack" },
+      { title: "Attendance & Register — Little Gems Academy" },
       {
         name: "description",
         content: "Mark student attendance, review absence permissions, and export historical logs.",
       },
-      { property: "og:title", content: "Attendance & Register — SchoolTrack" },
+      { property: "og:title", content: "Attendance & Register — Little Gems Academy" },
       {
         property: "og:description",
         content: "Mark student attendance, review absence permissions, and export historical logs.",
@@ -110,6 +111,9 @@ function AttendancePage() {
   const [correctionTargetStatus, setCorrectionTargetStatus] = useState("present");
   const [correctionReason, setCorrectionReason] = useState("");
 
+  // Student profile modal state
+  const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<StudentProfileData | null>(null);
+
   // Historical Records Table State
   const [from, setFrom] = useState(new Date(Date.now() - 29 * 864e5).toISOString().slice(0, 10));
   const [to, setTo] = useState(todayStr);
@@ -134,15 +138,12 @@ function AttendancePage() {
     },
   });
 
-  // Only show assigned classes to teachers (teacher_id matches or approved class_access)
+  // Allow inspecting all classes/sections across the academy
   const availableClasses = useMemo(() => {
-    if (!classes) return [];
-    if (!isTeacher) return classes;
-    const approvedIds = new Set((approvedClassAccess ?? []).map((p) => p.class_id));
-    return classes.filter((c) => c.teacher_id === user?.id || approvedIds.has(c.id));
-  }, [classes, isTeacher, user?.id, approvedClassAccess]);
+    return classes ?? [];
+  }, [classes]);
 
-  const hasNoAssignedClasses = isTeacher && availableClasses.length === 0;
+  const hasNoAssignedClasses = false;
 
   // Auto-select first class when classes load if none selected
   useMemo(() => {
@@ -807,13 +808,71 @@ function AttendancePage() {
                     <TableRow key={student.id} className="hover:bg-muted/30">
                       <TableCell>
                         <div className="flex items-center gap-2.5">
-                          <div className="grid size-8 place-items-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                            {student.full_name.charAt(0)}
-                          </div>
+                          {student.photo_url ? (
+                            <img
+                              src={student.photo_url}
+                              alt={student.full_name}
+                              className="size-8 rounded-full object-cover border shadow-xs shrink-0 cursor-pointer hover:opacity-80"
+                              onClick={() =>
+                                setSelectedStudentForProfile({
+                                  id: student.id,
+                                  student_code: student.student_code,
+                                  full_name: student.full_name,
+                                  photo_url: student.photo_url,
+                                  class_id: student.class_id,
+                                  classes: {
+                                    name: (classes ?? []).find((c) => c.id === student.class_id)?.name,
+                                  },
+                                  parent_name: student.parent_name,
+                                  parent_email: student.parent_email,
+                                  parent_phone: student.parent_phone,
+                                })
+                              }
+                            />
+                          ) : (
+                            <div
+                              className="grid size-8 place-items-center rounded-full bg-primary/10 text-xs font-semibold text-primary cursor-pointer hover:bg-primary/20"
+                              onClick={() =>
+                                setSelectedStudentForProfile({
+                                  id: student.id,
+                                  student_code: student.student_code,
+                                  full_name: student.full_name,
+                                  photo_url: student.photo_url,
+                                  class_id: student.class_id,
+                                  classes: {
+                                    name: (classes ?? []).find((c) => c.id === student.class_id)?.name,
+                                  },
+                                  parent_name: student.parent_name,
+                                  parent_email: student.parent_email,
+                                  parent_phone: student.parent_phone,
+                                })
+                              }
+                            >
+                              {student.full_name.charAt(0)}
+                            </div>
+                          )}
                           <div>
-                            <p className="font-medium text-sm leading-tight text-foreground">
+                            <button
+                              type="button"
+                              className="font-medium text-sm leading-tight text-foreground text-left hover:text-primary hover:underline cursor-pointer"
+                              onClick={() =>
+                                setSelectedStudentForProfile({
+                                  id: student.id,
+                                  student_code: student.student_code,
+                                  full_name: student.full_name,
+                                  photo_url: student.photo_url,
+                                  class_id: student.class_id,
+                                  classes: {
+                                    name: (classes ?? []).find((c) => c.id === student.class_id)?.name,
+                                  },
+                                  parent_name: student.parent_name,
+                                  parent_email: student.parent_email,
+                                  parent_phone: student.parent_phone,
+                                })
+                              }
+                            >
                               {student.full_name}
-                            </p>
+                            </button>
                             {record?.arrival_time && effectiveStatus === "present" && (
                               <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
                                 <Clock className="size-3" /> In: {fmtTime(record.arrival_time)}
@@ -1295,6 +1354,13 @@ function AttendancePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Student Profile Dialog */}
+      <StudentProfileModal
+        open={!!selectedStudentForProfile}
+        onOpenChange={(open) => !open && setSelectedStudentForProfile(null)}
+        student={selectedStudentForProfile}
+      />
     </div>
   );
 }

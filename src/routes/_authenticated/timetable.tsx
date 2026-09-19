@@ -38,12 +38,12 @@ import {
 export const Route = createFileRoute("/_authenticated/timetable")({
   head: () => ({
     meta: [
-      { title: "Timetable — SchoolTrack" },
+      { title: "Timetable — Little Gems Academy" },
       {
         name: "description",
         content: "Subjects, times, classes and the teacher assigned to each lesson.",
       },
-      { property: "og:title", content: "Timetable — SchoolTrack" },
+      { property: "og:title", content: "Timetable — Little Gems Academy" },
       {
         property: "og:description",
         content: "Subjects, times, classes and the teacher assigned to each lesson.",

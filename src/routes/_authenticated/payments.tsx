@@ -20,9 +20,9 @@ import {
 export const Route = createFileRoute("/_authenticated/payments")({
   head: () => ({
     meta: [
-      { title: "My Payments — SchoolTrack" },
+      { title: "My Payments — Little Gems Academy" },
       { name: "description", content: "See every school fee payment recorded for your children." },
-      { property: "og:title", content: "My Payments — SchoolTrack" },
+      { property: "og:title", content: "My Payments — Little Gems Academy" },
       {
         property: "og:description",
         content: "See every school fee payment recorded for your children.",

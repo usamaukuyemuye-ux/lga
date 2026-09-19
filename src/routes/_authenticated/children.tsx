@@ -61,12 +61,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/children")({
   head: () => ({
     meta: [
-      { title: "My Children — SchoolTrack" },
+      { title: "My Children — Little Gems Academy" },
       {
         name: "description",
         content: "View your child's profile, daily attendance, and submit leave permissions.",
       },
-      { property: "og:title", content: "My Children — SchoolTrack" },
+      { property: "og:title", content: "My Children — Little Gems Academy" },
       {
         property: "og:description",
         content: "View your child's profile, daily attendance, and submit leave permissions.",
@@ -351,19 +351,32 @@ function ChildrenPage() {
           <Card key={s.id} className="shadow-sm border">
             <CardHeader className="border-b pb-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <CardTitle className="text-lg font-bold">{s.full_name}</CardTitle>
-                    <Badge variant="outline" className="font-mono text-xs">
-                      {s.student_code}
-                    </Badge>
+                <div className="flex items-center gap-3">
+                  {s.photo_url ? (
+                    <img
+                      src={s.photo_url}
+                      alt={s.full_name}
+                      className="size-12 rounded-full object-cover border-2 border-primary/20 shadow-xs shrink-0"
+                    />
+                  ) : (
+                    <div className="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-base border shrink-0">
+                      {s.full_name?.charAt(0) ?? "C"}
+                    </div>
+                  )}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-lg font-bold">{s.full_name}</CardTitle>
+                      <Badge variant="outline" className="font-mono text-xs">
+                        {s.student_code}
+                      </Badge>
+                    </div>
+                    <CardDescription className="text-xs mt-0.5">
+                      Class:{" "}
+                      <span className="font-semibold text-foreground">
+                        {s.classes?.name ?? "Assigned Class"}
+                      </span>
+                    </CardDescription>
                   </div>
-                  <CardDescription className="text-xs mt-0.5">
-                    Class:{" "}
-                    <span className="font-semibold text-foreground">
-                      {s.classes?.name ?? "Assigned Class"}
-                    </span>
-                  </CardDescription>
                 </div>
 
                 {/* Day status focus indicator */}

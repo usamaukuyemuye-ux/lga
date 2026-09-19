@@ -37,9 +37,9 @@ export const Route = createFileRoute("/_authenticated/scan")({
 
   head: () => ({
     meta: [
-      { title: "QR Scanner — SchoolTrack Attendance" },
+      { title: "QR Scanner — Little Gems Academy" },
       { name: "description", content: "Scan a student ID card to record attendance instantly." },
-      { property: "og:title", content: "QR Scanner — SchoolTrack Attendance" },
+      { property: "og:title", content: "QR Scanner — Little Gems Academy" },
       {
         property: "og:description",
         content: "Scan a student ID card to record attendance instantly.",
@@ -313,7 +313,7 @@ function ScanPage() {
       time: fmtTime(new Date()),
       className: student.classes?.name ?? "—",
       teacher: profile?.full_name ?? "",
-      schoolName: "SchoolTrack Primary School",
+      schoolName: "Little Gems Academy",
     });
     const finalBody =
       mode === "departure" ? `${body}\n\nDeparture time: ${fmtTime(new Date())}` : body;

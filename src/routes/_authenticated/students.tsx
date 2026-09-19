@@ -19,12 +19,15 @@ import {
   Lock,
   Printer,
   QrCode,
+  Camera,
+  Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { PageHeader } from "@/components/school/ui";
 import { fetchClasses, fetchStudents, logAudit } from "@/lib/school";
+import { cn } from "@/lib/utils";
 import { StudentQrModal } from "@/components/school/student-qr-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,15 +63,15 @@ import { Switch } from "@/components/ui/switch";
 export const Route = createFileRoute("/_authenticated/students")({
   head: () => ({
     meta: [
-      { title: "Students & Parents — SchoolTrack Attendance" },
+      { title: "Students & Parents — Little Gems Academy" },
       {
         name: "description",
-        content: "Register and manage student records and parent accounts.",
+        content: "Register and manage student records and parent accounts at Little Gems Academy.",
       },
-      { property: "og:title", content: "Students & Parents — SchoolTrack Attendance" },
+      { property: "og:title", content: "Students & Parents — Little Gems Academy" },
       {
         property: "og:description",
-        content: "Register and manage student records and parent accounts.",
+        content: "Register and manage student records and parent accounts at Little Gems Academy.",
       },
     ],
   }),
@@ -94,6 +97,33 @@ export const ACADEMIC_YEARS = [
 ] as const;
 
 export const DEFAULT_ACADEMIC_YEAR = "2025-2026";
+
+export const STUDENT_PHOTO_PRESETS = [
+  {
+    label: "Boy Learner (P1-P3)",
+    url: "https://images.unsplash.com/photo-1543332164-6e82f355badc?w=200&h=200&fit=crop&crop=faces",
+  },
+  {
+    label: "Girl Learner (P1-P3)",
+    url: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=200&h=200&fit=crop&crop=faces",
+  },
+  {
+    label: "Girl Learner (P4-P6)",
+    url: "https://images.unsplash.com/photo-1595454223600-91fbdd7ce51a?w=200&h=200&fit=crop&crop=faces",
+  },
+  {
+    label: "Boy Learner (P4-P6)",
+    url: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&h=200&fit=crop&crop=faces",
+  },
+  {
+    label: "Young Student",
+    url: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=200&h=200&fit=crop&crop=faces",
+  },
+  {
+    label: "Senior Student",
+    url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=200&h=200&fit=crop&crop=faces",
+  },
+];
 
 export function getStudentAcademicYear(
   s: { academic_year?: string | null; created_at?: string } | null | undefined,
@@ -240,12 +270,8 @@ function StudentsPage() {
     },
   });
 
-  // Filter students: Teachers CANNOT view profiles of students not assigned to them
-  const visibleStudents = useMemo(() => {
-    const list = students ?? [];
-    if (!isTeacher) return list;
-    return list.filter((s) => s.class_id && assignedClassIds.has(s.class_id));
-  }, [students, isTeacher, assignedClassIds]);
+  // All students across all classes and sections are accessible to school staff
+  const visibleStudents = useMemo(() => students ?? [], [students]);
 
   const filteredStudents = useMemo(
     () =>
@@ -601,6 +627,75 @@ function StudentsPage() {
                             </SelectContent>
                           </Select>
                         </div>
+
+                        {/* Child Profile Picture Selector */}
+                        <div className="space-y-2 col-span-full pt-1 border-t">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-xs font-semibold flex items-center gap-1.5">
+                              <Camera className="size-3.5 text-primary" /> Child Profile Picture
+                            </Label>
+                            {form.photo_url && (
+                              <button
+                                type="button"
+                                className="text-[11px] text-destructive hover:underline font-medium cursor-pointer"
+                                onClick={() => setForm({ ...form, photo_url: "" })}
+                              >
+                                Remove Photo
+                              </button>
+                            )}
+                          </div>
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-2.5 rounded-lg border bg-background">
+                            <div className="size-14 rounded-full overflow-hidden border-2 border-primary/20 bg-muted/40 shrink-0 flex items-center justify-center">
+                              {form.photo_url ? (
+                                <img
+                                  src={form.photo_url}
+                                  alt={form.full_name || "Student"}
+                                  className="size-full object-cover"
+                                />
+                              ) : (
+                                <span className="font-bold text-base text-muted-foreground flex items-center justify-center">
+                                  {form.full_name ? (
+                                    form.full_name.charAt(0).toUpperCase()
+                                  ) : (
+                                    <Camera className="size-5 text-muted-foreground/60" />
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex-1 space-y-2 w-full min-w-0">
+                              <Input
+                                placeholder="Paste photo image URL (https://...) or choose a preset below"
+                                value={form.photo_url}
+                                onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
+                                className="h-8 text-xs"
+                              />
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-[10px] text-muted-foreground font-medium">
+                                  Sample Avatars:
+                                </span>
+                                {STUDENT_PHOTO_PRESETS.map((preset, idx) => (
+                                  <button
+                                    key={idx}
+                                    type="button"
+                                    className={cn(
+                                      "size-7 rounded-full overflow-hidden border hover:scale-110 transition-transform cursor-pointer shadow-2xs",
+                                      form.photo_url === preset.url &&
+                                        "ring-2 ring-primary border-primary",
+                                    )}
+                                    title={preset.label}
+                                    onClick={() => setForm({ ...form, photo_url: preset.url })}
+                                  >
+                                    <img
+                                      src={preset.url}
+                                      alt={preset.label}
+                                      className="size-full object-cover"
+                                    />
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -894,10 +989,8 @@ function StudentsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">
-                    {isTeacher ? "All my assigned classes" : "All classes"}
-                  </SelectItem>
-                  {(isTeacher ? assignedClasses : (classes ?? [])).map((c) => (
+                  <SelectItem value="all">All classes & sections</SelectItem>
+                  {(classes ?? []).map((c) => (
                     <SelectItem key={c.id} value={c.id}>
                       {c.name}
                     </SelectItem>
@@ -977,16 +1070,29 @@ function StudentsPage() {
                         {s.student_code}
                       </TableCell>
                       <TableCell>
-                        <button
-                          type="button"
-                          className="font-medium text-left hover:text-primary transition-colors cursor-pointer"
-                          onClick={() => {
-                            setSelectedStudent(s);
-                            setProfileDialogOpen(true);
-                          }}
-                        >
-                          {s.full_name}
-                        </button>
+                        <div className="flex items-center gap-2.5">
+                          {s.photo_url ? (
+                            <img
+                              src={s.photo_url}
+                              alt={s.full_name}
+                              className="size-8 rounded-full object-cover border shadow-xs shrink-0"
+                            />
+                          ) : (
+                            <div className="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 border">
+                              {s.full_name?.charAt(0) ?? "S"}
+                            </div>
+                          )}
+                          <button
+                            type="button"
+                            className="font-medium text-left hover:text-primary transition-colors cursor-pointer truncate max-w-[200px]"
+                            onClick={() => {
+                              setSelectedStudent(s);
+                              setProfileDialogOpen(true);
+                            }}
+                          >
+                            {s.full_name}
+                          </button>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline" className="text-xs">
@@ -1029,6 +1135,7 @@ function StudentsPage() {
                           </Button>
                           <Link
                             to="/discipline"
+                            search={{ studentId: s.id }}
                             className="inline-flex items-center justify-center size-8 rounded-md text-muted-foreground hover:text-primary hover:bg-accent transition-colors"
                             title="Discipline & Conduct Records"
                           >
@@ -1221,22 +1328,18 @@ function StudentsPage() {
 
           {selectedStudent && (
             <div className="space-y-4 pt-2">
-              {isTeacher &&
-              (!selectedStudent.class_id || !assignedClassIds.has(selectedStudent.class_id)) ? (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-xs text-destructive flex items-start gap-2">
-                  <ShieldAlert className="size-4 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold">Access Restricted:</span> You are not assigned
-                    to this student's class. Teachers may only inspect profiles of learners on their
-                    active class roster.
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40 border">
-                    <div className="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-base">
-                      {selectedStudent.full_name?.charAt(0) ?? "S"}
-                    </div>
+              <div className="flex items-center gap-3.5 p-3 rounded-lg bg-muted/40 border">
+                    {selectedStudent.photo_url ? (
+                      <img
+                        src={selectedStudent.photo_url}
+                        alt={selectedStudent.full_name}
+                        className="size-14 rounded-full object-cover border-2 border-primary/30 shadow-sm shrink-0"
+                      />
+                    ) : (
+                      <div className="size-14 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xl shrink-0 border">
+                        {selectedStudent.full_name?.charAt(0) ?? "S"}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-sm truncate">
                         {selectedStudent.full_name}
@@ -1385,6 +1488,7 @@ function StudentsPage() {
                     <div className="pt-1">
                       <Link
                         to="/discipline"
+                        search={{ studentId: selectedStudent.id }}
                         className="text-xs font-medium text-primary hover:underline flex items-center gap-1"
                         onClick={() => setProfileDialogOpen(false)}
                       >
@@ -1392,11 +1496,39 @@ function StudentsPage() {
                       </Link>
                     </div>
                   </div>
-                </>
-              )}
             </div>
           )}
           <DialogFooter className="gap-2 sm:justify-between">
+            {canManage && selectedStudent && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5 cursor-pointer text-xs"
+                onClick={() => {
+                  setProfileDialogOpen(false);
+                  setForm({
+                    id: selectedStudent.id,
+                    student_code: selectedStudent.student_code,
+                    full_name: selectedStudent.full_name,
+                    gender: selectedStudent.gender,
+                    religion: selectedStudent.religion ?? "non-muslim",
+                    academic_year: getStudentAcademicYear(selectedStudent),
+                    date_of_birth: selectedStudent.date_of_birth ?? "",
+                    class_id: selectedStudent.class_id ?? "",
+                    parent_name: selectedStudent.parent_name ?? "",
+                    parent_email: selectedStudent.parent_email ?? "",
+                    parent_phone: selectedStudent.parent_phone ?? "",
+                    address: selectedStudent.address ?? "",
+                    photo_url: selectedStudent.photo_url ?? "",
+                    create_parent_account: false,
+                  });
+                  setOpen(true);
+                }}
+              >
+                <Pencil className="size-3.5" />
+                <span>Edit & Photo</span>
+              </Button>
+            )}
             <Button
               size="sm"
               className="gap-1.5 font-semibold bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"

@@ -53,13 +53,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/permissions")({
   head: () => ({
     meta: [
-      { title: "Permissions & Requests — SchoolTrack" },
+      { title: "Permissions & Requests — Little Gems Academy" },
       {
         name: "description",
         content:
           "Student leave permissions, attendance corrections, and teacher class access requests.",
       },
-      { property: "og:title", content: "Permissions & Requests — SchoolTrack" },
+      { property: "og:title", content: "Permissions & Requests — Little Gems Academy" },
       {
         property: "og:description",
         content:

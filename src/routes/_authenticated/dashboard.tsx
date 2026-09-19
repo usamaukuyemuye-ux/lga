@@ -78,6 +78,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudentQrModal, type StudentProfileForQr } from "@/components/school/student-qr-modal";
+import { PayslipModal, formatMonthName, type SalaryRecord } from "@/components/school/payslip-modal";
 
 export function AdminDashboard() {
   const { profile, user } = useAuth();
@@ -972,6 +973,30 @@ export function TeacherDashboard() {
   const [markStatus, setMarkStatus] = useState<"present" | "late" | "sick" | "absent">("present");
   const [markNotes, setMarkNotes] = useState("");
   const [isSubmittingMark, setIsSubmittingMark] = useState(false);
+  const [selectedPayslip, setSelectedPayslip] = useState<SalaryRecord | null>(null);
+
+  // Query personal salary disbursements for teacher
+  const { data: mySalaries = [] } = useQuery<SalaryRecord[]>({
+    queryKey: ["my-teacher-salaries", user?.id, profile?.email],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("salaries")
+        .select("*")
+        .order("payment_date", { ascending: false });
+      if (error) throw error;
+      const all = (data as any) ?? [];
+      return all.filter((s: any) => {
+        if (!s) return false;
+        const matchesId = user?.id && s.staff_id === user.id;
+        const matchesEmail = profile?.email && s.staff_email?.toLowerCase() === profile.email.toLowerCase();
+        const matchesName = profile?.full_name && s.staff_name?.toLowerCase() === profile.full_name.toLowerCase();
+        const matchesDemoTeacher = s.staff_id === "user-teacher-01" && (profile?.role === "teacher" || profile?.full_name?.toLowerCase().includes("alice") || !profile);
+        return matchesId || matchesEmail || matchesName || matchesDemoTeacher;
+      });
+    },
+  });
+
+  const latestSalary = mySalaries[0] || null;
 
   // Queries for teacher view
   const { data: teacherData, isLoading } = useQuery({
@@ -1347,6 +1372,122 @@ export function TeacherDashboard() {
             </CardContent>
           </Card>
 
+          {/* Teacher Salary & Remuneration Card */}
+          <Card className="border-primary/20 shadow-sm">
+            <CardHeader className="pb-3 border-b">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
+                  <CreditCard className="size-4 text-primary" />
+                  <span>My Salary & Remuneration</span>
+                </CardTitle>
+                {latestSalary && (
+                  <Badge className="bg-emerald-600 text-white text-[10px] font-semibold">
+                    {formatMonthName(latestSalary.month_year)}
+                  </Badge>
+                )}
+              </div>
+              <CardDescription className="text-xs">
+                Monthly remuneration, statutory slips & payslips
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-4 space-y-3">
+              {latestSalary ? (
+                <>
+                  <div className="bg-slate-900 text-white p-3.5 rounded-lg">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                      Net Remuneration ({formatMonthName(latestSalary.month_year)})
+                    </span>
+                    <div className="flex items-baseline justify-between mt-1">
+                      <span className="text-xl font-extrabold text-white">
+                        {latestSalary.currency || "RWF"} {Number(latestSalary.net_amount).toLocaleString()}
+                      </span>
+                      <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="size-3" /> Disbursed
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Summary Breakdown */}
+                  <div className="grid grid-cols-3 gap-2 text-center text-xs bg-muted/40 p-2.5 rounded-lg border">
+                    <div>
+                      <span className="text-[10px] text-muted-foreground block">Base Pay</span>
+                      <span className="font-semibold text-foreground text-xs">
+                        RWF {Number(latestSalary.base_amount || 0).toLocaleString()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-muted-foreground block">Allowances</span>
+                      <span className="font-semibold text-emerald-700 dark:text-emerald-400 text-xs">
+                        +{(latestSalary.allowances || 0).toLocaleString()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-muted-foreground block">Deductions</span>
+                      <span className="font-semibold text-rose-700 dark:text-rose-400 text-xs">
+                        -{(latestSalary.deductions || 0).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-muted-foreground font-mono">
+                      Ref: {latestSalary.reference || "BK-PAY"}
+                    </span>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="h-8 text-xs gap-1.5 cursor-pointer"
+                      onClick={() => setSelectedPayslip(latestSalary)}
+                    >
+                      <Printer className="size-3.5" />
+                      <span>View & Print Payslip</span>
+                    </Button>
+                  </div>
+
+                  {/* Past Vouchers History if any */}
+                  {mySalaries.length > 1 && (
+                    <div className="pt-2 border-t space-y-1.5">
+                      <span className="text-[11px] font-semibold text-muted-foreground block">
+                        Past Remuneration Vouchers:
+                      </span>
+                      <div className="space-y-1 max-h-32 overflow-y-auto">
+                        {mySalaries.slice(1).map((s) => (
+                          <div
+                            key={s.id}
+                            className="flex items-center justify-between text-xs p-2 rounded bg-muted/20 border"
+                          >
+                            <div>
+                              <span className="font-semibold block">{formatMonthName(s.month_year)}</span>
+                              <span className="text-[10px] text-muted-foreground">
+                                RWF {Number(s.net_amount).toLocaleString()} · {fmtDate(s.payment_date)}
+                              </span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 text-xs px-2 cursor-pointer"
+                              onClick={() => setSelectedPayslip(s)}
+                            >
+                              Payslip
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="p-4 rounded-lg border border-dashed text-center space-y-1.5 bg-muted/20">
+                  <CreditCard className="size-6 text-muted-foreground mx-auto" />
+                  <p className="font-semibold text-xs text-foreground">Next Payroll in Progress</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Your monthly salary disbursement voucher and printable payslip will appear here once processed by the finance bursar.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* School Announcements */}
           <Card>
             <CardHeader className="pb-3">
@@ -1460,6 +1601,15 @@ export function TeacherDashboard() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Official Printable Payslip Modal for Teacher */}
+      <PayslipModal
+        open={!!selectedPayslip}
+        onOpenChange={(open) => {
+          if (!open) setSelectedPayslip(null);
+        }}
+        salary={selectedPayslip}
+      />
     </div>
   );
 }
@@ -2248,9 +2398,9 @@ export function OwnerDashboard() {
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — SchoolTrack" },
+      { title: "Dashboard — Little Gems Academy" },
       { name: "description", content: "School attendance and operations dashboard" },
-      { property: "og:title", content: "Dashboard — SchoolTrack" },
+      { property: "og:title", content: "Dashboard — Little Gems Academy" },
       { property: "og:description", content: "School attendance and operations dashboard" },
     ],
   }),
@@ -2285,7 +2435,7 @@ function DashboardDispatcher() {
       return (
         <Card className="m-4">
           <CardContent className="p-8 text-center">
-            <h2 className="text-xl font-bold">Welcome to SchoolTrack</h2>
+            <h2 className="text-xl font-bold">Welcome to Little Gems Academy</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Your account role is currently: {role ? roleLabel[role] : "Standard User"}
             </p>

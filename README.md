@@ -1,6 +1,6 @@
-# SchoolTrack - School Management System
+# Little Gems Academy - School Management System
 
-A comprehensive school management and student tracking web application built with React, TypeScript, TanStack Start, and Firebase Firestore.
+A comprehensive school management and student tracking web application built with React, TypeScript, TanStack Start, and Firebase Firestore for Little Gems Academy.
 
 ## Features
 

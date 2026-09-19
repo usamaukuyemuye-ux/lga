@@ -9,6 +9,8 @@
         "full_name": { "type": "string", "maxLength": 100 },
         "email": { "type": "string", "maxLength": 120 },
         "phone": { "type": "string", "maxLength": 40 },
+        "photo_url": { "type": "string", "maxLength": 500 },
+        "duty": { "type": "string", "maxLength": 100 },
         "active": { "type": "boolean" },
         "created_at": { "type": "string", "maxLength": 40 }
       },
@@ -370,6 +372,42 @@
         "enrolled_by_role": { "type": "string", "maxLength": 40 }
       },
       "required": ["club_id", "student_id", "student_name"]
+    },
+    "Salary": {
+      "title": "Salary",
+      "description": "Staff payroll salary disbursement records",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "staff_id": { "type": "string", "maxLength": 128 },
+        "staff_name": { "type": "string", "maxLength": 100 },
+        "staff_email": { "type": "string", "maxLength": 120 },
+        "staff_duty": { "type": "string", "maxLength": 100 },
+        "staff_role": { "type": "string", "maxLength": 40 },
+        "staff_phone": { "type": "string", "maxLength": 40 },
+        "staff_photo_url": { "type": "string", "maxLength": 500 },
+        "month_year": { "type": "string", "maxLength": 50 },
+        "base_amount": { "type": "number" },
+        "allowances": { "type": "number" },
+        "deductions": { "type": "number" },
+        "net_amount": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 20 },
+        "payment_method": {
+          "type": "string",
+          "enum": ["bank", "mobile money", "cash", "cheque"]
+        },
+        "payment_date": { "type": "string", "maxLength": 40 },
+        "reference": { "type": "string", "maxLength": 100 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "status": {
+          "type": "string",
+          "enum": ["paid", "pending", "processing"]
+        },
+        "paid_by": { "type": "string", "maxLength": 128 },
+        "paid_by_name": { "type": "string", "maxLength": 100 },
+        "created_at": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["staff_id", "staff_name", "month_year", "net_amount", "status"]
     }
   },
   "firestore": {
@@ -444,6 +482,10 @@
     "/club_memberships/{membershipId}": {
       "schema": "ClubMembership",
       "description": "Student memberships in clubs and teams"
+    },
+    "/salaries/{salaryId}": {
+      "schema": "Salary",
+      "description": "Staff payroll salary disbursement records"
     }
   }
 }

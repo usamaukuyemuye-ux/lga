@@ -160,6 +160,12 @@ service cloud.firestore {
       allow write: if isPermitted() && isValidId(membershipId);
     }
 
+    // Staff Salaries collection
+    match /salaries/{salaryId} {
+      allow read: if isPermitted();
+      allow write: if isPermitted() && isValidId(salaryId);
+    }
+
     // Fallback for any other collection
     match /{document=**} {
       allow read, write: if isPermitted();

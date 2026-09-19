@@ -46,12 +46,12 @@ import { Badge } from "@/components/ui/badge";
 export const Route = createFileRoute("/_authenticated/users")({
   head: () => ({
     meta: [
-      { title: "Users & Roles — SchoolTrack Attendance" },
+      { title: "Users & Roles — Little Gems Academy" },
       {
         name: "description",
         content: "Create teacher, secretary and parent accounts and manage their access.",
       },
-      { property: "og:title", content: "Users & Roles — SchoolTrack Attendance" },
+      { property: "og:title", content: "Users & Roles — Little Gems Academy" },
       {
         property: "og:description",
         content: "Create teacher, secretary and parent accounts and manage their access.",

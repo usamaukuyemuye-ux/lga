@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { PageHeader } from "@/components/school/ui";
+import { StudentProfileModal, type StudentProfileData } from "@/components/school/student-profile-modal";
 import { fmtDate, fmtTime, todayISO, logAudit } from "@/lib/school";
 import { exportExcel, exportPdf } from "@/lib/export";
 import { Button } from "@/components/ui/button";
@@ -66,7 +67,7 @@ import {
 import { dispatchLocalNotification } from "@/lib/device-notifications";
 
 export const Route = createFileRoute("/_authenticated/discipline")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): { studentId?: string; view?: "report" | "register" } => ({
     studentId: typeof search.studentId === "string" ? search.studentId : undefined,
     view: typeof search.view === "string" ? (search.view as "report" | "register") : undefined,
   }),
@@ -208,6 +209,7 @@ function DisciplinePage() {
   const [filterSeverity, setFilterSeverity] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterAck, setFilterAck] = useState("all");
+  const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<StudentProfileData | null>(null);
 
   // Query: Classes
   const { data: classes } = useQuery({
@@ -993,9 +995,25 @@ function DisciplinePage() {
                               </TableCell>
 
                               <TableCell>
-                                <div className="font-semibold text-foreground">
+                                <button
+                                  type="button"
+                                  className="font-semibold text-foreground text-left hover:text-primary hover:underline cursor-pointer block leading-tight"
+                                  onClick={() => {
+                                    const st = (students ?? []).find((s) => s.id === incident.student_id);
+                                    if (st) {
+                                      setSelectedStudentForProfile(st);
+                                    } else {
+                                      setSelectedStudentForProfile({
+                                        id: incident.student_id,
+                                        student_code: incident.student_code,
+                                        full_name: incident.student_name,
+                                        classes: { name: incident.class_name },
+                                      });
+                                    }
+                                  }}
+                                >
                                   {incident.student_name}
-                                </div>
+                                </button>
                                 <div className="font-mono text-[10px] text-primary">
                                   {incident.student_code}
                                 </div>
@@ -1565,6 +1583,13 @@ function DisciplinePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Student Profile Modal */}
+      <StudentProfileModal
+        open={!!selectedStudentForProfile}
+        onOpenChange={(open) => !open && setSelectedStudentForProfile(null)}
+        student={selectedStudentForProfile}
+      />
     </div>
   );
 }

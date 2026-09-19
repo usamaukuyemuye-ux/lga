@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import { Printer } from "lucide-react";
 import { PageHeader } from "@/components/school/ui";
 import { fetchClasses, fetchStudents } from "@/lib/school";
+import { StudentProfileModal, type StudentProfileData } from "@/components/school/student-profile-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SchoolLogo } from "@/components/school/logo";
@@ -19,9 +20,9 @@ import {
 export const Route = createFileRoute("/_authenticated/cards")({
   head: () => ({
     meta: [
-      { title: "Student ID Cards — SchoolTrack Attendance" },
+      { title: "Student ID Cards — Little Gems Academy" },
       { name: "description", content: "Generate and print student ID cards with unique QR codes." },
-      { property: "og:title", content: "Student ID Cards — SchoolTrack Attendance" },
+      { property: "og:title", content: "Student ID Cards — Little Gems Academy" },
       {
         property: "og:description",
         content: "Generate and print student ID cards with unique QR codes.",
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/_authenticated/cards")({
 function CardsPage() {
   const [classFilter, setClassFilter] = useState("all");
   const [qrs, setQrs] = useState<Record<string, string>>({});
+  const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<StudentProfileData | null>(null);
   const { data: students } = useQuery({ queryKey: ["students"], queryFn: fetchStudents });
   const { data: classes } = useQuery({ queryKey: ["classes"], queryFn: fetchClasses });
 
@@ -96,7 +98,23 @@ function CardsPage() {
             </div>
             <CardContent className="flex gap-4 p-4">
               <div className="min-w-0 flex-1">
-                <p className="truncate text-lg font-bold">{s.full_name}</p>
+                <div className="flex items-center gap-2 mb-1">
+                  {s.photo_url ? (
+                    <img
+                      src={s.photo_url}
+                      alt={s.full_name}
+                      className="size-8 rounded-full object-cover border shrink-0 cursor-pointer hover:opacity-80"
+                      onClick={() => setSelectedStudentForProfile(s)}
+                    />
+                  ) : null}
+                  <button
+                    type="button"
+                    className="truncate text-lg font-bold text-left hover:text-primary hover:underline cursor-pointer"
+                    onClick={() => setSelectedStudentForProfile(s)}
+                  >
+                    {s.full_name}
+                  </button>
+                </div>
                 <dl className="mt-2 space-y-1 text-sm text-muted-foreground">
                   <div className="flex gap-2">
                     <dt className="font-medium text-foreground">ID:</dt>
@@ -128,6 +146,13 @@ function CardsPage() {
           <p className="text-sm text-muted-foreground">No students in this class yet.</p>
         )}
       </div>
+
+      {/* Student Profile Modal */}
+      <StudentProfileModal
+        open={!!selectedStudentForProfile}
+        onOpenChange={(open) => !open && setSelectedStudentForProfile(null)}
+        student={selectedStudentForProfile}
+      />
     </div>
   );
 }

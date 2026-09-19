@@ -5,6 +5,7 @@ import { Plus, Trash2, School, Users, Search, GraduationCap } from "lucide-react
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/school/ui";
+import { StudentProfileModal, type StudentProfileData } from "@/components/school/student-profile-modal";
 import { useAuth } from "@/lib/auth";
 import { fetchClasses, fetchStudents, logAudit } from "@/lib/school";
 import { Button } from "@/components/ui/button";
@@ -33,12 +34,12 @@ import { Badge } from "@/components/ui/badge";
 export const Route = createFileRoute("/_authenticated/classes")({
   head: () => ({
     meta: [
-      { title: "Classes — SchoolTrack Attendance" },
+      { title: "Classes — Little Gems Academy" },
       {
         name: "description",
         content: "Create and manage school classes and their student allocation.",
       },
-      { property: "og:title", content: "Classes — SchoolTrack Attendance" },
+      { property: "og:title", content: "Classes — Little Gems Academy" },
       {
         property: "og:description",
         content: "Create and manage school classes and their student allocation.",
@@ -56,6 +57,8 @@ function ClassesPage() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newClassName, setNewClassName] = useState("");
+  const [selectedRosterClass, setSelectedRosterClass] = useState<any | null>(null);
+  const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<StudentProfileData | null>(null);
 
   const { data: classes } = useQuery({ queryKey: ["classes"], queryFn: fetchClasses });
   const { data: students } = useQuery({ queryKey: ["students"], queryFn: fetchStudents });
@@ -253,8 +256,14 @@ function ClassesPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-xs text-muted-foreground">
-                        <Button variant="link" size="sm" asChild className="p-0 h-auto text-xs">
-                          <Link to="/students">View roster</Link>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 text-xs gap-1.5 cursor-pointer"
+                          onClick={() => setSelectedRosterClass(c)}
+                        >
+                          <Users className="size-3 text-primary" />
+                          <span>View roster ({classStudents.length})</span>
                         </Button>
                       </TableCell>
                       <TableCell className="text-right">
@@ -290,6 +299,95 @@ function ClassesPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Class Section Roster Dialog */}
+      <Dialog
+        open={!!selectedRosterClass}
+        onOpenChange={(open) => !open && setSelectedRosterClass(null)}
+      >
+        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              <School className="size-5 text-primary" />
+              {selectedRosterClass?.name} · Class Roster
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Enrolled students in this classroom section. Click any learner to open their full profile.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedRosterClass && (
+            <div className="space-y-2 pt-1">
+              {(() => {
+                const enrolled = (students ?? []).filter(
+                  (s) => s.class_id === selectedRosterClass.id,
+                );
+                if (enrolled.length === 0) {
+                  return (
+                    <div className="text-center py-6 text-xs text-muted-foreground">
+                      No learners currently assigned to {selectedRosterClass.name}.
+                    </div>
+                  );
+                }
+                return (
+                  <div className="space-y-1.5">
+                    {enrolled.map((st) => (
+                      <div
+                        key={st.id}
+                        className="flex items-center justify-between p-2 rounded-lg border bg-card hover:bg-muted/40 transition-colors"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {st.photo_url ? (
+                            <img
+                              src={st.photo_url}
+                              alt={st.full_name}
+                              className="size-9 rounded-full object-cover border shadow-2xs shrink-0"
+                            />
+                          ) : (
+                            <div className="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 border">
+                              {st.full_name?.charAt(0) ?? "S"}
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <p className="font-semibold text-xs truncate text-foreground">
+                              {st.full_name}
+                            </p>
+                            <p className="font-mono text-[10px] text-muted-foreground">
+                              ID: {st.student_code}
+                            </p>
+                          </div>
+                        </div>
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-xs gap-1 cursor-pointer shrink-0"
+                          onClick={() => {
+                            setSelectedStudentForProfile({
+                              ...st,
+                              classes: { name: selectedRosterClass.name },
+                            });
+                          }}
+                        >
+                          <GraduationCap className="size-3 text-primary" />
+                          <span>Profile</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Student Profile Dialog */}
+      <StudentProfileModal
+        open={!!selectedStudentForProfile}
+        onOpenChange={(open) => !open && setSelectedStudentForProfile(null)}
+        student={selectedStudentForProfile}
+      />
     </div>
   );
 }

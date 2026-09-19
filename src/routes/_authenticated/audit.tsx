@@ -16,9 +16,9 @@ import {
 export const Route = createFileRoute("/_authenticated/audit")({
   head: () => ({
     meta: [
-      { title: "Activity Logs — SchoolTrack" },
+      { title: "Activity Logs — Little Gems Academy" },
       { name: "description", content: "System activity and audit trail for administrators." },
-      { property: "og:title", content: "Activity Logs — SchoolTrack" },
+      { property: "og:title", content: "Activity Logs — Little Gems Academy" },
       {
         property: "og:description",
         content: "System activity and audit trail for administrators.",

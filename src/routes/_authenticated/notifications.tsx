@@ -15,12 +15,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/notifications")({
   head: () => ({
     meta: [
-      { title: "Notifications Log — SchoolTrack" },
+      { title: "Notifications Log — Little Gems Academy" },
       {
         name: "description",
         content: "History of attendance notifications sent to parents.",
       },
-      { property: "og:title", content: "Notifications Log — SchoolTrack" },
+      { property: "og:title", content: "Notifications Log — Little Gems Academy" },
       {
         property: "og:description",
         content: "History of attendance notifications sent to parents.",

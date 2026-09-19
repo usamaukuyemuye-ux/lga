@@ -104,16 +104,11 @@ export function CookieBanner() {
                   <Cookie className="size-5" />
                 </div>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-semibold text-foreground">
-                      Cookie & Security Preferences
-                    </h3>
-                    <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
-                      <ShieldCheck className="mr-1 size-3" /> Secure
-                    </span>
-                  </div>
+                  <h3 className="text-sm font-semibold text-foreground">
+                    Cookie & Privacy Preferences
+                  </h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Little Gems Academy uses cookies to safeguard your session, prevent
+                    Little Gems Academy uses essential cookies to safeguard your session, prevent
                     unauthorized portal access, maintain real-time announcements, and remember your audio chime
                     preferences.
                   </p>

@@ -75,12 +75,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/activities")({
   head: () => ({
     meta: [
-      { title: "Activities & Clubs — SchoolTrack" },
+      { title: "Activities & Clubs — Little Gems Academy" },
       {
         name: "description",
         content: "Extracurricular clubs, athletic sports teams, and student membership rosters.",
       },
-      { property: "og:title", content: "Activities & Clubs — SchoolTrack" },
+      { property: "og:title", content: "Activities & Clubs — Little Gems Academy" },
       {
         property: "og:description",
         content: "Extracurricular clubs, athletic sports teams, and student membership rosters.",

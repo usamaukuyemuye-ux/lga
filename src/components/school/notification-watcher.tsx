@@ -57,7 +57,7 @@ export function GlobalNotificationWatcher() {
             );
 
             // In-app alert
-            toast.info(`🔔 Announcement: ${newest.title}`, {
+            toast.info(`Announcement: ${newest.title}`, {
               description: newest.body?.slice(0, 100),
               duration: 8000,
             });
@@ -93,7 +93,7 @@ export function GlobalNotificationWatcher() {
               );
 
               // Trigger toast
-              toast.info(`💎 Little Gems Academy: ${item.title}`, {
+              toast.info(`Little Gems Academy: ${item.title}`, {
                 description: item.body?.slice(0, 100),
                 duration: 8000,
               });

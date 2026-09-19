@@ -8,6 +8,9 @@ export const DEMO_ACCOUNTS = [
     name: "System Administrator",
     role: "admin" as const,
     password: "Admin123",
+    duty: "Lead Systems Administrator & IT Director",
+    photo_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 567 890",
   },
   {
     id: "user-owner",
@@ -15,13 +18,19 @@ export const DEMO_ACCOUNTS = [
     name: "School Owner",
     role: "owner" as const,
     password: "Owner123",
+    duty: "School Director & Proprietor",
+    photo_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 678 901",
   },
   {
     id: "user-head-studies",
     email: "headofstudies@school.com",
-    name: "Dr. Paul Kayitare (Head of Studies)",
+    name: "Dr. Paul Kayitare",
     role: "head_of_studies" as const,
     password: "Studies123",
+    duty: "Director of Academics & Head of Studies",
+    photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 456 789",
   },
   {
     id: "user-secretary",
@@ -29,6 +38,9 @@ export const DEMO_ACCOUNTS = [
     name: "Mary Uwase",
     role: "secretary" as const,
     password: "Secretary123",
+    duty: "School Secretary & Front Desk Operations",
+    photo_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 234 567",
   },
   {
     id: "user-teacher",
@@ -36,6 +48,9 @@ export const DEMO_ACCOUNTS = [
     name: "Jane Smith",
     role: "teacher" as const,
     password: "Teacher123",
+    duty: "Senior Primary Teacher & Grade Head",
+    photo_url: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 123 456",
   },
   {
     id: "user-finance",
@@ -43,6 +58,9 @@ export const DEMO_ACCOUNTS = [
     name: "Peter Habimana",
     role: "finance" as const,
     password: "Finance123",
+    duty: "Chief Bursar & Finance Officer",
+    photo_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 345 678",
   },
   {
     id: "user-parent",
@@ -50,6 +68,9 @@ export const DEMO_ACCOUNTS = [
     name: "John Doe Sr.",
     role: "parent" as const,
     password: "Parent123",
+    duty: "Parent / Guardian",
+    photo_url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=faces",
+    phone: "+250 788 901 234",
   },
 ];
 
@@ -72,11 +93,11 @@ export async function seedInitialData() {
     if (!settingsDoc.exists()) {
       await setDoc(doc(db, "school_settings", "default"), {
         id: "default",
-        school_name: "SchoolTrack Primary School",
-        email: "info@schooltrack.edu",
+        school_name: "Little Gems Academy",
+        email: "info@littlegemsacademy.edu",
         phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        notify_email: "notifications@schooltrack.edu",
+        notify_email: "notifications@littlegemsacademy.edu",
         logo_url: null,
       });
     }
@@ -85,15 +106,20 @@ export async function seedInitialData() {
     for (const acc of DEMO_ACCOUNTS) {
       const profRef = doc(db, "profiles", acc.id);
       const profSnap = await getDoc(profRef);
+      const profData = {
+        id: acc.id,
+        full_name: acc.name,
+        email: acc.email,
+        phone: acc.phone || "+250 780 000 000",
+        duty: acc.duty || "Staff Member",
+        photo_url: acc.photo_url || null,
+        active: true,
+        created_at: new Date().toISOString(),
+      };
       if (!profSnap.exists()) {
-        await setDoc(profRef, {
-          id: acc.id,
-          full_name: acc.name,
-          email: acc.email,
-          phone: "+250 780 000 000",
-          active: true,
-          created_at: new Date().toISOString(),
-        });
+        await setDoc(profRef, profData);
+      } else {
+        await setDoc(profRef, profData, { merge: true });
       }
 
       const roleRef = doc(db, "user_roles", `role-${acc.id}`);
@@ -144,7 +170,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1543332164-6e82f355badc?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-0001-QR",
         religion: "Christian",
         active: true,
@@ -161,7 +187,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-P1-001-QR",
         religion: "Christian",
         active: true,
@@ -178,7 +204,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1595454223600-91fbdd7ce51a?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-0002-QR",
         religion: "Christian",
         active: true,
@@ -195,7 +221,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-0003-QR",
         religion: "Christian",
         active: true,
@@ -212,7 +238,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-0004-QR",
         religion: "Christian",
         active: true,
@@ -229,7 +255,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1543332164-6e82f355badc?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-0005-QR",
         religion: "Christian",
         active: true,
@@ -246,7 +272,7 @@ export async function seedInitialData() {
         parent_email: "parent@school.com",
         parent_phone: "+250 780 000 000",
         address: "Kigali, Rwanda",
-        photo_url: null,
+        photo_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces",
         qr_token: "STU-STD-0006-QR",
         religion: "Christian",
         active: true,
@@ -514,7 +540,7 @@ export async function seedInitialData() {
     if (annSnap.empty) {
       await setDoc(doc(db, "announcements", "ann-1"), {
         id: "ann-1",
-        title: "Welcome to SchoolTrack Term 2",
+        title: "Welcome to Little Gems Academy Term 2",
         body: "All classes have resumed. QR scanning stations are active at the front gate.",
         action_label: "View Timetable",
         action_url: "/timetable",
@@ -890,6 +916,114 @@ export async function seedInitialData() {
 
         for (const sub of sampleSubmissions) {
           await setDoc(doc(db, "assignment_submissions", sub.id), sub);
+        }
+      }
+
+      // Sample Staff Salaries
+      const sampleSalaries = [
+        {
+          id: "sal-teacher-2026-09",
+          staff_id: "user-teacher",
+          staff_name: "Jane Smith",
+          staff_email: "teacher@school.com",
+          staff_duty: "Senior Primary Teacher & Grade Head",
+          staff_role: "teacher",
+          staff_phone: "+250 788 123 456",
+          staff_photo_url: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&h=200&fit=crop&crop=faces",
+          month_year: "2026-09",
+          base_amount: 450000,
+          allowances: 50000,
+          deductions: 30000,
+          net_amount: 470000,
+          currency: "RWF",
+          payment_method: "bank",
+          payment_date: "2026-09-15",
+          reference: "BK-PAY-202609-01",
+          notes: "September 2026 salary disbursement via Bank of Kigali direct deposit",
+          status: "paid",
+          paid_by: "user-finance",
+          paid_by_name: "Peter Habimana",
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: "sal-teacher-2026-08",
+          staff_id: "user-teacher",
+          staff_name: "Jane Smith",
+          staff_email: "teacher@school.com",
+          staff_duty: "Senior Primary Teacher & Grade Head",
+          staff_role: "teacher",
+          staff_phone: "+250 788 123 456",
+          staff_photo_url: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&h=200&fit=crop&crop=faces",
+          month_year: "2026-08",
+          base_amount: 450000,
+          allowances: 50000,
+          deductions: 30000,
+          net_amount: 470000,
+          currency: "RWF",
+          payment_method: "bank",
+          payment_date: "2026-08-28",
+          reference: "BK-PAY-202608-01",
+          notes: "August 2026 salary disbursement",
+          status: "paid",
+          paid_by: "user-finance",
+          paid_by_name: "Peter Habimana",
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: "sal-sec-2026-09",
+          staff_id: "user-secretary",
+          staff_name: "Mary Uwase",
+          staff_email: "secretary@school.com",
+          staff_duty: "School Secretary & Front Desk Operations",
+          staff_role: "secretary",
+          staff_phone: "+250 788 234 567",
+          staff_photo_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=faces",
+          month_year: "2026-09",
+          base_amount: 350000,
+          allowances: 35000,
+          deductions: 25000,
+          net_amount: 360000,
+          currency: "RWF",
+          payment_method: "mobile money",
+          payment_date: "2026-09-15",
+          reference: "MOMO-LGA-9281",
+          notes: "September 2026 secretarial salary paid via MTN MoMo",
+          status: "paid",
+          paid_by: "user-finance",
+          paid_by_name: "Peter Habimana",
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: "sal-head-2026-09",
+          staff_id: "user-head-studies",
+          staff_name: "Dr. Paul Kayitare",
+          staff_email: "headofstudies@school.com",
+          staff_duty: "Director of Academics & Head of Studies",
+          staff_role: "head_of_studies",
+          staff_phone: "+250 788 456 789",
+          staff_photo_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces",
+          month_year: "2026-09",
+          base_amount: 650000,
+          allowances: 70000,
+          deductions: 50000,
+          net_amount: 670000,
+          currency: "RWF",
+          payment_method: "bank",
+          payment_date: "2026-09-15",
+          reference: "BK-PAY-202609-03",
+          notes: "September 2026 Academic Director remuneration",
+          status: "paid",
+          paid_by: "user-finance",
+          paid_by_name: "Peter Habimana",
+          created_at: new Date().toISOString(),
+        },
+      ];
+
+      for (const sal of sampleSalaries) {
+        const salRef = doc(db, "salaries", sal.id);
+        const snap = await getDoc(salRef);
+        if (!snap.exists()) {
+          await setDoc(salRef, sal);
         }
       }
     }

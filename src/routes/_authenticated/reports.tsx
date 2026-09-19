@@ -31,13 +31,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
-      { title: "Reports — SchoolTrack Attendance" },
+      { title: "Reports — Little Gems Academy" },
       {
         name: "description",
         content:
           "Daily, weekly, monthly attendance and tuition fee reports with PDF and Excel export.",
       },
-      { property: "og:title", content: "Reports — SchoolTrack Attendance" },
+      { property: "og:title", content: "Reports — Little Gems Academy" },
       {
         property: "og:description",
         content: "Daily, weekly, monthly attendance and tuition fee reports.",

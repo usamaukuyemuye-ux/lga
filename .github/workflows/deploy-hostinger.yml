@@ -24,12 +24,20 @@ jobs:
       - name: Build Application
         run: npm run build
 
+      - name: Prepare Clean Server Host
+        id: ftp-host
+        run: |
+          RAW_SERVER="${{ secrets.HOSTINGER_FTP_SERVER }}"
+          CLEAN_SERVER=$(echo "$RAW_SERVER" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+          echo "server=$CLEAN_SERVER" >> $GITHUB_OUTPUT
+
       - name: Sync to Hostinger public_html via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          server: ${{ steps.ftp-host.outputs.server }}
           username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
           local-dir: .output/public/
-          server-dir: public_html/
+          server-dir: ./
+

@@ -31,7 +31,12 @@ jobs:
           CLEAN_SERVER=$(echo "$RAW_SERVER" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
           echo "server=$CLEAN_SERVER" >> $GITHUB_OUTPUT
 
-      - name: Sync to Hostinger public_html via FTP
+      - name: Verify Generated Files
+        run: |
+          ls -la .output/public/
+          test -f .output/public/index.html && echo "index.html exists!" || exit 1
+
+      - name: Sync to Hostinger Root via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ steps.ftp-host.outputs.server }}
@@ -40,4 +45,16 @@ jobs:
           port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
           local-dir: .output/public/
           server-dir: ./
+          dangerous-clean-slate: false
 
+      - name: Also Sync to public_html/ (in case FTP root is above public_html)
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ steps.ftp-host.outputs.server }}
+          username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
+          local-dir: .output/public/
+          server-dir: public_html/
+          dangerous-clean-slate: false

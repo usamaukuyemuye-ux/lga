@@ -18,7 +18,7 @@ export function SiteFooter() {
           <ul className="mt-2 space-y-1 text-muted-foreground">
             <li>contact@littlegemsacademy.edu</li>
             <li>ukuyemuyeusam@gmail.com</li>
-            <li>+250 780 000 000</li>
+            <li>+250 781 087 077</li>
             <li>Kigali, Rwanda</li>
           </ul>
         </div>

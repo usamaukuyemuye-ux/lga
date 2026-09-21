@@ -26,7 +26,15 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { PageHeader } from "@/components/school/ui";
-import { fetchClasses, fetchStudents, logAudit } from "@/lib/school";
+import {
+  fetchClasses,
+  fetchStudents,
+  logAudit,
+  type CampusCode,
+  CAMPUSES,
+  generateStudentRegistrationCode,
+  parseStudentRegistrationCode,
+} from "@/lib/school";
 import { cn } from "@/lib/utils";
 import { StudentQrModal } from "@/components/school/student-qr-modal";
 import { Button } from "@/components/ui/button";

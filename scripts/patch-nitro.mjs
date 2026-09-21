@@ -42,3 +42,32 @@ if (fs.existsSync(serverFuncIndex)) {
     console.log("[patch-nitro] Patched .vercel/output/functions/__server.func/index.mjs");
   }
 }
+
+// Patch Nitro raw asset loader to prevent Vite's CSS parser from treating transformed raw assets as CSS
+const nitroCommonPath = path.resolve("node_modules/nitro/dist/_build/common.mjs");
+if (fs.existsSync(nitroCommonPath)) {
+  let content = fs.readFileSync(nitroCommonPath, "utf-8");
+  const targetPattern = 'code: `import {base64ToUint8Array } from "${HELPER_ID}" \\n export default base64ToUint8Array("${Buffer.from(code, "binary").toString("base64")}")`,';
+  if (content.includes(targetPattern) && !content.includes('moduleType: "js", // patched')) {
+    content = content.replace(
+      targetPattern,
+      `code: \`import {base64ToUint8Array } from "\${HELPER_ID}" \\n export default base64ToUint8Array("\${Buffer.from(code, "binary").toString("base64")}")\`, moduleType: "js", // patched`
+    );
+    // Also patch resolveId so virtual:nitro:raw doesn't end in .css, preventing vite:css plugin from running on it
+    content = content.replace(
+      'return { id: RESOLVED_PREFIX + resolvedId };',
+      'return { id: (RESOLVED_PREFIX + resolvedId).endsWith(".css") ? (RESOLVED_PREFIX + resolvedId + "?raw-asset.js") : (RESOLVED_PREFIX + resolvedId) };'
+    );
+    // Also patch filter in transform/load to match ?raw-asset.js or strip query
+    content = content.replace(
+      'promises.readFile(id.slice(18),',
+      'promises.readFile(id.slice(18).replace(/\\?raw-asset\\.js$/, ""),'
+    );
+    content = content.replace(
+      'const path = id.slice(18);',
+      'const path = id.slice(18).replace(/\\?raw-asset\\.js$/, "");'
+    );
+    fs.writeFileSync(nitroCommonPath, content, "utf-8");
+    console.log("[patch-nitro] Patched nitro common.mjs raw asset transform");
+  }
+}

@@ -55,7 +55,9 @@ function checkReady(attempts = 0) {
 </IfModule>
 `;
         fs.writeFileSync(path.join(outDir, ".htaccess"), htaccessContent, "utf-8");
-        console.log("Successfully created .htaccess for SPA client routing");
+        fs.writeFileSync(path.join(process.cwd(), ".htaccess"), htaccessContent, "utf-8");
+        fs.writeFileSync(path.join(process.cwd(), "index.html"), data, "utf-8");
+        console.log("Successfully created .htaccess and index.html in root and outDir");
 
         cleanup();
         process.exit(0);

@@ -28,13 +28,16 @@ jobs:
         id: ftp-host
         run: |
           RAW_SERVER="${{ secrets.HOSTINGER_FTP_SERVER }}"
-          CLEAN_SERVER=$(echo "$RAW_SERVER" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+          CLEAN_SERVER=$(echo "$RAW_SERVER" | sed -e 's|^[^/]*//||' -e 's|/.*$||' -e 's|:.*$||' | tr -d ' ')
           echo "server=$CLEAN_SERVER" >> $GITHUB_OUTPUT
 
-      - name: Verify Generated Files
+      - name: Verify Generated Static Files
         run: |
+          echo "Listing .output/public:"
           ls -la .output/public/
           test -f .output/public/index.html && echo "index.html exists!" || exit 1
+          # Also ensure public/ has the static files for backup
+          cp -r .output/public/. public/ 2>/dev/null || true
 
       - name: Sync to Hostinger Root via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -47,7 +50,7 @@ jobs:
           server-dir: ./
           dangerous-clean-slate: false
 
-      - name: Also Sync to public_html/ (in case FTP root is above public_html)
+      - name: Also Sync to public_html/ (if FTP root is one level above public_html)
         continue-on-error: true
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

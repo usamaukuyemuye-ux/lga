@@ -31,26 +31,53 @@ jobs:
           CLEAN_SERVER=$(echo "$RAW_SERVER" | sed -e 's|^[^/]*//||' -e 's|/.*$||' -e 's|:.*$||' | tr -d ' ')
           echo "server=$CLEAN_SERVER" >> $GITHUB_OUTPUT
 
-      - name: Verify Generated Static Files
+      - name: Prepare Deploy Bundles
         run: |
-          echo "Listing .output/public:"
-          ls -la .output/public/
-          test -f .output/public/index.html && echo "index.html exists!" || exit 1
-          # Also ensure public/ has the static files for backup
-          cp -r .output/public/. public/ 2>/dev/null || true
+          echo "Verifying generated build artifacts..."
+          test -f .output/public/index.html && echo "index.html exists in .output/public!" || exit 1
+          
+          # Create an explicit deployment package matching Hostinger's structure
+          mkdir -p /tmp/hostinger-deploy
+          cp -r .output/public/* /tmp/hostinger-deploy/
+          cp -r .output/public/.* /tmp/hostinger-deploy/ 2>/dev/null || true
 
-      - name: Sync to Hostinger Root via FTP
+          # Also create a nested public/ folder inside the deploy package
+          # in case Hostinger is configured with document root public_html/public
+          mkdir -p /tmp/hostinger-deploy/public
+          cp -r .output/public/* /tmp/hostinger-deploy/public/
+          cp -r .output/public/.* /tmp/hostinger-deploy/public/ 2>/dev/null || true
+
+          echo "Deployment package prepared successfully."
+          ls -la /tmp/hostinger-deploy/
+
+      # Case A: If FTP user opens directly inside public_html
+      - name: Deploy to FTP Root (./)
+        continue-on-error: true
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ steps.ftp-host.outputs.server }}
           username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
-          local-dir: .output/public/
+          local-dir: /tmp/hostinger-deploy/
           server-dir: ./
           dangerous-clean-slate: false
 
-      - name: Also Sync to public_html/ (if FTP root is one level above public_html)
+      # Case B: If FTP user opens above public_html
+      - name: Deploy to public_html/
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ steps.ftp-host.outputs.server }}
+          username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
+          local-dir: /tmp/hostinger-deploy/
+          server-dir: public_html/
+          dangerous-clean-slate: false
+
+      # Case C: If Hostinger points document root to public_html/public/
+      - name: Deploy to public_html/public/
         continue-on-error: true
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -59,5 +86,5 @@ jobs:
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
           local-dir: .output/public/
-          server-dir: public_html/
+          server-dir: public_html/public/
           dangerous-clean-slate: false

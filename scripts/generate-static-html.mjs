@@ -57,7 +57,22 @@ function checkReady(attempts = 0) {
         fs.writeFileSync(path.join(outDir, ".htaccess"), htaccessContent, "utf-8");
         fs.writeFileSync(path.join(process.cwd(), ".htaccess"), htaccessContent, "utf-8");
         fs.writeFileSync(path.join(process.cwd(), "index.html"), data, "utf-8");
-        console.log("Successfully created .htaccess and index.html in root and outDir");
+
+        // Keep public/index.html and public/.htaccess fully in sync for web hosts using public_html or public/
+        const publicDir = path.resolve(process.cwd(), "public");
+        fs.writeFileSync(path.join(publicDir, "index.html"), data, "utf-8");
+        fs.writeFileSync(path.join(publicDir, ".htaccess"), htaccessContent, "utf-8");
+
+        // Sync assets directory
+        const outAssets = path.join(outDir, "assets");
+        const pubAssets = path.join(publicDir, "assets");
+        const rootAssets = path.resolve(process.cwd(), "assets");
+        if (fs.existsSync(outAssets)) {
+          fs.cpSync(outAssets, pubAssets, { recursive: true, force: true });
+          fs.cpSync(outAssets, rootAssets, { recursive: true, force: true });
+        }
+
+        console.log("Successfully synchronized index.html, .htaccess, and assets across .output/public, public, and root");
 
         cleanup();
         process.exit(0);

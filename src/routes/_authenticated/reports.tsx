@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { PageHeader } from "@/components/school/ui";
 import { fetchAttendance, fetchClasses, fetchStudents, fmtTime, todayISO } from "@/lib/school";
 import { exportExcel, exportPdf } from "@/lib/export";
+import { SchoolLogo } from "@/components/school/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -514,7 +515,7 @@ function ReportsPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => exportExcel(head, rows as (string | number)[][], fileName)}
+              onClick={() => exportExcel(head, rows as (string | number)[][], fileName, title)}
             >
               <FileSpreadsheet className="size-4" /> Excel
             </Button>
@@ -527,6 +528,30 @@ function ReportsPage() {
 
       <Card className="print-area">
         <CardContent className="p-4">
+          {/* Official School Header for Screen & Print */}
+          <div className="mb-5 pb-4 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <SchoolLogo size="lg" showText={false} />
+              <div>
+                <h3 className="text-base font-bold tracking-tight text-foreground uppercase">
+                  Little Gems Academy
+                </h3>
+                <p className="text-xs text-muted-foreground font-medium">
+                  Excellence in Primary Education · Kigali, Rwanda
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  Phone: <span className="font-semibold text-foreground">+250 781 087 077</span> · Email: contact@littlegemsacademy.edu · ukuyemuyeusam@gmail.com
+                </p>
+              </div>
+            </div>
+            <div className="text-right text-xs text-muted-foreground hidden sm:block">
+              <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-semibold bg-primary/10 text-primary uppercase">
+                Official Report
+              </span>
+              <p className="mt-1 text-[11px]">Portal: lgatest.online</p>
+            </div>
+          </div>
+
           <div className="no-print mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <Label>Report type</Label>

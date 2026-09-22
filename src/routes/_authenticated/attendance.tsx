@@ -564,12 +564,12 @@ function AttendancePage() {
               size="sm"
               onClick={() => exportPdf("Attendance Records", head, body, "attendance-records")}
             >
-              <FileDown className="size-4" /> PDF
+              <FileDown className="size-4" /> Download PDF
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => exportExcel(head, body, "attendance-records")}
+              onClick={() => exportExcel(head, body, "attendance-records", "Attendance Records")}
             >
               <FileSpreadsheet className="size-4" /> Excel
             </Button>
@@ -1038,13 +1038,31 @@ function AttendancePage() {
 
       {/* BOTTOM SECTION: ATTENDANCE RECORDS & REPORTS TABLE */}
       <Card>
-        <CardHeader className="pb-3 border-b">
-          <CardTitle className="text-base font-semibold flex items-center gap-2">
-            <CalendarClock className="size-4 text-primary" /> Attendance Records & History
-          </CardTitle>
-          <CardDescription>
-            Search historical attendance logs, filter by custom date range, and export to PDF/Excel.
-          </CardDescription>
+        <CardHeader className="pb-3 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <CalendarClock className="size-4 text-primary" /> Attendance Records & History
+            </CardTitle>
+            <CardDescription>
+              Search historical attendance logs, filter by custom date range, and export to PDF/Excel with school branding.
+            </CardDescription>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => exportPdf("Attendance Records", head, body, "attendance-records")}
+            >
+              <FileDown className="size-4" /> Download PDF
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => exportExcel(head, body, "attendance-records", "Attendance Records")}
+            >
+              <FileSpreadsheet className="size-4" /> Excel
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="p-4 space-y-4">
           {hasNoAssignedClasses ? (

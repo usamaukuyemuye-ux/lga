@@ -44,7 +44,7 @@ function checkReady(attempts = 0) {
         fs.writeFileSync(outFile, data, "utf-8");
         console.log(`Successfully generated ${outFile} (${data.length} bytes)`);
 
-        // Also write .htaccess for Hostinger Apache/LiteSpeed SPA fallback
+        // Also write .htaccess for Hostinger Apache/LiteSpeed SPA fallback and immediate updates
         const htaccessContent = `<IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -53,6 +53,15 @@ function checkReady(attempts = 0) {
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
+
+# Never cache HTML so updates appear immediately without waiting
+<FilesMatch "\\.(html|htm)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </IfModule>
+</FilesMatch>
 `;
         fs.writeFileSync(path.join(outDir, ".htaccess"), htaccessContent, "utf-8");
         fs.writeFileSync(path.join(process.cwd(), ".htaccess"), htaccessContent, "utf-8");

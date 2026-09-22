@@ -275,9 +275,10 @@ export function LoginView() {
           </button>
         </div>
 
-        <p className="text-center text-[11px] text-muted-foreground">
-          © {new Date().getFullYear()} Little Gems Academy · All rights reserved
-        </p>
+        <div className="text-center text-[11px] text-muted-foreground space-y-0.5">
+          <p>Support: <span className="font-medium text-foreground">+250 781 087 077</span> · contact@littlegemsacademy.edu</p>
+          <p>© {new Date().getFullYear()} Little Gems Academy · All rights reserved</p>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,4 @@
 import { SchoolLogo } from "./logo";
-import { openCookiePreferencesModal } from "./cookie-banner";
-import { ShieldCheck, Cookie, Bell } from "lucide-react";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -35,11 +33,6 @@ export function SiteFooter() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-xs text-muted-foreground sm:flex-row">
           <div className="flex items-center gap-2">
             <span>© {year} Little Gems Academy. All rights reserved.</span>
-            
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-            
           </div>
         </div>
       </div>
